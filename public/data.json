@@ -1,0 +1,44 @@
+{
+    "data": [
+        {
+            "name": "Mukhamad",
+            "position": "Fullstack Developer",
+            "office": "Yogyakarta",
+            "extn": "5421",
+            "start_date": "2022-01-15",
+            "salary": "$4,500"
+        },
+        {
+            "name": "Ayu Lestari",
+            "position": "UI/UX Designer",
+            "office": "Jakarta",
+            "extn": "3784",
+            "start_date": "2021-08-01",
+            "salary": "$3,800"
+        },
+        {
+            "name": "Budi Santoso",
+            "position": "Finance Manager",
+            "office": "Bandung",
+            "extn": "2145",
+            "start_date": "2020-03-10",
+            "salary": "$6,200"
+        },
+        {
+            "name": "Siti Rahma",
+            "position": "Marketing Analyst",
+            "office": "Surabaya",
+            "extn": "6312",
+            "start_date": "2023-06-20",
+            "salary": "$4,000"
+        },
+        {
+            "name": "Dimas Prasetyo",
+            "position": "Product Owner",
+            "office": "Semarang",
+            "extn": "4890",
+            "start_date": "2019-11-05",
+            "salary": "$5,500"
+        }
+    ]
+}
