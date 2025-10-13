@@ -4,7 +4,7 @@ export default function AppLayout({ children }) {
     const { props } = usePage();
 
     return (
-        <div className="w-screen flex bg-gray-100">
+        <div className="min-h-screen max-w-screen flex bg-gray-100">
             <header className="w-full h-16 bg-white flex items-center justify-between px-6 shadow-md border-b border-gray-200 fixed">
                 <h1 className="text-xl font-bold text-gray-800">
                     Nama Usaha Anda

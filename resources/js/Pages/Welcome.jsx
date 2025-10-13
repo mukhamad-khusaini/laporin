@@ -1,18 +1,13 @@
 import "../../css/app.css";
 import AppLayout from "./layouts/App.Layouts";
-import DataTable from "datatables.net-react";
-import DT from "datatables.net-dt";
-
-DataTable.use(DT);
+import TailwindTable from "./utils/TailwindTable";
 
 export default function Welcome() {
     const columns = [
-        { data: "name" },
-        { data: "position" },
-        { data: "office" },
-        { data: "extn" },
-        { data: "start_date" },
-        { data: "salary" },
+        { header: "Name", accessor: "name" },
+        { header: "Position", accessor: "position" },
+        { header: "Office", accessor: "office" },
+        { header: "Extn.", accessor: "extn" },
     ];
 
     return (
@@ -37,26 +32,12 @@ export default function Welcome() {
                     <h2 className="text-lg font-semibold">Lorem ipsum</h2>
                 </div>
             </div> */}
+
             <h2 className="text-2xl font-bold mb-4 bg-white px-6 py-4">
                 Tagihan Pembelian
             </h2>
             <div className="px-6 py-3">
-                <DataTable
-                    ajax="./data.json"
-                    columns={columns}
-                    className="display"
-                >
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Position</th>
-                            <th>Office</th>
-                            <th>Extn.</th>
-                            <th>Start date</th>
-                            <th>Salary</th>
-                        </tr>
-                    </thead>
-                </DataTable>
+                <TailwindTable columns={columns} jsonUrl="/data.json" />
             </div>
         </div>
     );
