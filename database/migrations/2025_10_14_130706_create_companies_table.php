@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->enum('company_type', ['jasa','dagang','manufaktur']);
             $table->string('name');
             $table->timestamps();
         });

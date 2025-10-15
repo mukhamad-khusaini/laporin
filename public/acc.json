@@ -1,0 +1,20 @@
+{
+    "data": [
+        {
+            "no": 1,
+            "nama": "Kas",
+            "deskripsi": "Akun kas untuk transaksi tunai"
+        },
+        {
+            "no": 2,
+            "nama": "Piutang Usaha",
+            "deskripsi": "Akun piutang dari pelanggan"
+        },
+        {
+            "no": 3,
+            "nama": "Persediaan",
+            "deskripsi": "Akun barang dagang yang tersedia"
+        },
+        { "no": 4, "nama": "Modal", "deskripsi": "Akun modal pemilik usaha" }
+    ]
+}

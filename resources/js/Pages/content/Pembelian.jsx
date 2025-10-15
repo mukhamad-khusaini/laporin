@@ -12,7 +12,7 @@ export default function Pembelian() {
     ];
 
     return (
-        <AuthenticatedLayout>
+        <AuthenticatedLayout title="Pembelian">
             <h2 className="text-2xl font-bold px-6 py-3 mb-4">Pembelian</h2>
             <div className="px-6 py-3">
                 <TailwindTable columns={columns} jsonUrl="./data.json" />

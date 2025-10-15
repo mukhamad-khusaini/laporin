@@ -1,33 +1,34 @@
 import { useState, useEffect, useMemo } from "react";
 
-export default function TailwindTable({ columns, jsonUrl }) {
-    const [rawData, setRawData] = useState([]);
+export default function TailwindTable({ columns, data: rawInput }) {
+    const [data, setData] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [entriesPerPage, setEntriesPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
 
-    // Fetch data dari file JSON
+    // Normalisasi data: array langsung atau { data: [...] }
     useEffect(() => {
-        fetch(jsonUrl)
-            .then((res) => res.json())
-            .then((res) => {
-                const loaded = res.data || res; // support format { data: [...] } atau langsung array
-                setRawData(loaded);
-            })
-            .catch((err) => console.error("Gagal memuat data JSON:", err));
-    }, [jsonUrl]);
+        if (Array.isArray(rawInput)) {
+            setData(rawInput);
+        } else if (rawInput?.data && Array.isArray(rawInput.data)) {
+            setData(rawInput.data);
+        } else {
+            console.warn("Format data tidak dikenali:", rawInput);
+            setData([]);
+        }
+    }, [rawInput]);
 
     // Filter berdasarkan search
     const filteredData = useMemo(() => {
-        if (!searchTerm) return rawData;
-        return rawData.filter((row) =>
+        if (!searchTerm) return data;
+        return data.filter((row) =>
             columns.some((col) =>
-                String(row[col.accessor])
+                String(row[col.accessor] ?? "")
                     .toLowerCase()
                     .includes(searchTerm.toLowerCase())
             )
         );
-    }, [searchTerm, rawData, columns]);
+    }, [searchTerm, data, columns]);
 
     // Pagination
     const totalPages = Math.ceil(filteredData.length / entriesPerPage);
@@ -91,7 +92,9 @@ export default function TailwindTable({ columns, jsonUrl }) {
                                         key={col.accessor}
                                         className="px-4 py-2"
                                     >
-                                        {row[col.accessor]}
+                                        {col.Cell
+                                            ? col.Cell({ row })
+                                            : row[col.accessor]}
                                     </td>
                                 ))}
                             </tr>

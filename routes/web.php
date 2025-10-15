@@ -5,6 +5,8 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+use App\Http\Controllers\CompanyController;
+
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -14,9 +16,13 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
+// Route::get('/dashboard', function () {
+//     return Inertia::render('Dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get("/dashboard", function () {
     return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified', \App\Http\Middleware\EnsureUserHasCompany::class])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -27,5 +33,11 @@ Route::middleware('auth')->group(function () {
 Route::get('/pembelian', function () { 
     return Inertia::render('content/Pembelian');
 })->name('pembelian');
+
+Route::get('/akun', function () { 
+    return Inertia::render('content/Akun');
+})->name('akun');
+
+Route::post('/create-company', [CompanyController::class, 'store'])->middleware(['auth'])->name('create.company');
 
 require __DIR__.'/auth.php';

@@ -19,6 +19,7 @@ class CompanyFactory extends Factory
         return [
             'user_id' => \App\Models\User::factory(),
             'name' => $this->faker->company(),
+            'company_type' => $this->faker->randomElement(['jasa','dagang','manufaktur']),
         ];
     }
 }
