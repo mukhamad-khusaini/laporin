@@ -1,4 +1,3 @@
-import AppLayout from "./layouts/App.Layouts";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 
 export default function Dashboard() {

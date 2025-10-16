@@ -3,9 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
-
 use App\Http\Controllers\CompanyController;
+use Inertia\Inertia;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -38,6 +37,8 @@ Route::get('/akun', function () {
     return Inertia::render('content/Akun');
 })->name('akun');
 
-Route::post('/create-company', [CompanyController::class, 'store'])->middleware(['auth'])->name('create.company');
+Route::post('/create-company', function($i){
+    return $i;
+})->middleware(['auth'])->name('create.company');
 
 require __DIR__.'/auth.php';
