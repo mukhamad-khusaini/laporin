@@ -22,7 +22,6 @@ class AccountFactory extends Factory
             'name' => $this->faker->word(),
             'account_code' => $this->faker->unique()->numerify('###'),
             'is_active' => true,
-            'parent_account_id' => null, // bisa diisi manual nanti
         ];
     }
 }

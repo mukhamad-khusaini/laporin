@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('company_id')->constrained("companies")->onDelete('cascade');
             $table->foreignId('account_type_id')->constrained("account_types")->onDelete('cascade');
-            $table->foreignId('parent_account_id')->nullable()->constrained("accounts")->onDelete('set null');
             $table->string('name');
             $table->string('account_code')->unique();
             $table->boolean('is_active')->default(true);

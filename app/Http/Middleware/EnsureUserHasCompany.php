@@ -16,10 +16,11 @@ class EnsureUserHasCompany
     public function handle($request, Closure $next)
     {
         if ($request->routeIs('company.create','company.store')) {
+            if(Auth::user()->company){
+                return redirect()->route('dashboard');
+            }
             return $next($request);
-        }
-
-        if (Auth::check() && !Auth::user()->company) {
+        } else if (Auth::check() && !Auth::user()->company) {
             return redirect()->route('company.create');
         }
 

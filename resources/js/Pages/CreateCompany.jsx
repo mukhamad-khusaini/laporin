@@ -5,17 +5,69 @@ export default function CreateCompany() {
     const [jenisUsaha, setJenisUsaha] = useState("");
 
     const akunDasar = [
-        "Kas",
-        "Utang",
-        "Modal",
-        "Beban",
-        "Peralatan",
-        "Perlengkapan",
+        {
+            name: "Kas",
+            code: 101,
+            type_id: 1,
+        },
+        {
+            name: "Utang",
+            code: 201,
+            type_id: 2,
+        },
+        {
+            name: "Modal",
+            code: 301,
+            type_id: 3,
+        },
+        {
+            name: "Beban",
+            code: 401,
+            type_id: 4,
+        },
+        {
+            name: "Peralatan",
+            code: 102,
+            type_id: 1,
+        },
+        {
+            name: "Perlengkapan",
+            code: 103,
+            type_id: 1,
+        },
     ];
     const akunTambahan = {
-        jasa: ["Pendapatan"],
-        dagang: ["Penjualan"],
-        manufaktur: ["Penjualan", "Bahan Baku"],
+        jasa: [
+            {
+                name: "Pendapatan",
+                code: 501,
+                type_id: 5,
+            },
+        ],
+        dagang: [
+            {
+                name: "Penjualan",
+                code: 501,
+                type_id: 5,
+            },
+            {
+                name: "Persediaan Barang",
+                code: 104,
+                type_id: 1,
+            },
+        ],
+        manufaktur: [
+            {
+                name: "Penjualan",
+                code: 501,
+                type_id: 5,
+            },
+            {
+                name: "Bahan Baku",
+                code: 104,
+                type_id: 1,
+            },
+        ],
     };
 
     const getAkunList = () => {
@@ -112,19 +164,19 @@ export default function CreateCompany() {
                         <div className="grid grid-cols-2 gap-2">
                             {getAkunList().map((akun) => (
                                 <label
-                                    key={akun}
+                                    key={akun.name}
                                     className="flex items-center space-x-2"
                                 >
                                     <input
                                         type="checkbox"
                                         name="akun_default[]"
-                                        value={akun}
+                                        value={akun.name}
                                         checked
                                         disabled
                                         className="rounded"
                                     />
                                     <span className="text-sm text-gray-700">
-                                        {akun}
+                                        {akun.name}
                                     </span>
                                 </label>
                             ))}

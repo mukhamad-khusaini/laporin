@@ -5,6 +5,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CompanyController;
 use App\Http\Middleware\EnsureUserHasCompany;
+use App\Models\Account;
 use Inertia\Inertia;
 
 
@@ -36,13 +37,9 @@ Route::get('/pembelian', function () {
 })->name('pembelian');
 
 Route::get('/akun', function () { 
-    return Inertia::render('content/Akun');
+    return Inertia::render('content/Akun',['data'=>Account::all()]);
 })->name('akun');
 
-Route::get('/pivot', function(){
-    return Inertia::render('Pivot');
-});
-
-Route::resource('company', CompanyController::class);
+Route::resource('company', CompanyController::class)->middleware(['auth']);
 
 require __DIR__.'/auth.php';

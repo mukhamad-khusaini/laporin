@@ -13,7 +13,7 @@ class Account extends Model
 
     protected $fillable = [
         'company_id', 'account_type_id', 'name', 'account_code',
-        'is_active', 'parent_account_id'
+        'is_active'
     ];
 
     public function company(): BelongsTo
@@ -24,11 +24,6 @@ class Account extends Model
     public function type(): BelongsTo
     {
         return $this->belongsTo(AccountType::class, 'account_type_id');
-    }
-
-    public function parent(): BelongsTo
-    {
-        return $this->belongsTo(Account::class, 'parent_account_id');
     }
 
     public function children(): HasMany

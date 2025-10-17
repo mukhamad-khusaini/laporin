@@ -2,11 +2,11 @@ import TailwindTable from "../utils/TailwindTable";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 
-export default function Akun() {
+export default function Akun(props) {
+    console.log(props.data);
     const columns = [
-        { header: "No", accessor: "no" },
-        { header: "Nama Akun", accessor: "nama" },
-        { header: "Deskripsi", accessor: "deskripsi" },
+        { header: "Kode Akun", accessor: "account_code" },
+        { header: "Nama Akun", accessor: "name" },
         {
             header: "Aksi",
             accessor: "aksi",
@@ -59,7 +59,7 @@ export default function Akun() {
             <Head title="Akun" />
             <div className="p-6 space-y-6">
                 <h2 className="text-2xl font-bold text-gray-800">Akun</h2>
-                <TailwindTable columns={columns} data={data} />
+                <TailwindTable columns={columns} data={props.data} />
             </div>
         </AuthenticatedLayout>
     );

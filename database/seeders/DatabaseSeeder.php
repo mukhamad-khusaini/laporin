@@ -2,14 +2,16 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use App\Models\Company;
-use App\Models\AccountType;
-use App\Models\Account;
-use App\Models\TransactionHeader;
-use App\Models\TransactionDetail;
+// use App\Models\User;
+// use App\Models\Company;
+// use App\Models\AccountType;
+// use App\Models\Account;
+// use App\Models\TransactionHeader;
+// use App\Models\TransactionDetail;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 
 class DatabaseSeeder extends Seeder
@@ -19,51 +21,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        $user = User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        DB::table('account_types')->insert([
+            ['id' => 1, 'name' => 'Asset','normal_balance' => 'debit'],
+            ['id' => 2, 'name' => 'Utang','normal_balance' => 'credit'],
+            ['id' => 3, 'name' => 'Modal','normal_balance' => 'credit'],
+            ['id' => 4, 'name' => 'Beban','normal_balance' => 'debit'],
+            ['id' => 5, 'name' => 'Omset','normal_balance' => 'credit'],
         ]);
-
-         // Buat 1 company untuk user tersebut
-         $company = Company::factory()->create([
-            'user_id' => $user->id,
-            'name' => 'PT Laporin Sejahtera',
-        ]);
-
-        // Buat 4 jenis akun dasar
-        $types = collect([
-            ['name' => 'Aktiva', 'normal_balance' => 'debit'],
-            ['name' => 'Kewajiban', 'normal_balance' => 'credit'],
-            ['name' => 'Ekuitas', 'normal_balance' => 'credit'],
-            ['name' => 'Pendapatan', 'normal_balance' => 'credit'],
-        ])->map(fn ($type) => AccountType::create($type));
-
-        // Buat 5 akun
-        $accounts = Account::factory()->count(5)->create([
-            'company_id' => $company->id,
-            'account_type_id' => $types->random()->id,
-        ]);
-
-        // Buat 3 transaksi
-        TransactionHeader::factory()->count(3)->create([
-            'company_id' => $company->id,
-            'user_id' => $user->id,
-        ])->each(function ($header) use ($accounts) {
-            TransactionDetail::factory()->create([
-                'transaction_header_id' => $header->id,
-                'account_id' => $accounts->random()->id,
-                'debit' => 100000,
-                'credit' => 0,
-            ]);
-
-            TransactionDetail::factory()->create([
-                'transaction_header_id' => $header->id,
-                'account_id' => $accounts->random()->id,
-                'debit' => 0,
-                'credit' => 100000,
-            ]);
-        });
     }
 }
