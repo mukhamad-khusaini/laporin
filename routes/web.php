@@ -4,7 +4,9 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CompanyController;
+use App\Http\Middleware\EnsureUserHasCompany;
 use Inertia\Inertia;
+
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -21,7 +23,7 @@ Route::get('/', function () {
 
 Route::get("/dashboard", function () {
     return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified', \App\Http\Middleware\EnsureUserHasCompany::class])->name('dashboard');
+})->middleware(['auth', 'verified', EnsureUserHasCompany::class])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -37,8 +39,10 @@ Route::get('/akun', function () {
     return Inertia::render('content/Akun');
 })->name('akun');
 
-Route::post('/create-company', function($i){
-    return $i;
-})->middleware(['auth'])->name('create.company');
+Route::get('/pivot', function(){
+    return Inertia::render('Pivot');
+});
+
+Route::resource('company', CompanyController::class);
 
 require __DIR__.'/auth.php';

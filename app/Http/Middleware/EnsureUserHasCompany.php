@@ -15,8 +15,12 @@ class EnsureUserHasCompany
      */
     public function handle($request, Closure $next)
     {
+        if ($request->routeIs('company.create','company.store')) {
+            return $next($request);
+        }
+
         if (Auth::check() && !Auth::user()->company) {
-            return Inertia::render('CreateCompany');
+            return redirect()->route('company.create');
         }
 
         return $next($request);

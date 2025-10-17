@@ -31,7 +31,7 @@ export default function CreateCompany() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post("/create-company");
+        post("/company");
     };
 
     return (
@@ -146,6 +146,7 @@ export default function CreateCompany() {
 }
 
 // import { useState } from "react";
+// import { Form } from "@inertiajs/react";
 
 // export default function CreateCompany() {
 //     const [jenisUsaha, setJenisUsaha] = useState("");
@@ -171,10 +172,11 @@ export default function CreateCompany() {
 
 //     return (
 //         <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-//             <form
+//             <Form
 //                 method="post"
 //                 action="/create-company"
 //                 className="bg-white rounded-xl shadow-lg w-[90vw] max-w-3xl p-6 space-y-6"
+//                 onSuccess={(e) => console.log(e)}
 //             >
 //                 {/* Gambar */}
 //                 <div className="w-full h-40 bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
@@ -233,7 +235,7 @@ export default function CreateCompany() {
 //                                         name="akun_default[]"
 //                                         value={akun}
 //                                         checked
-//                                         disabled
+//                                         readOnly
 //                                         className="rounded"
 //                                     />
 //                                     <span className="text-sm text-gray-700">
@@ -251,7 +253,7 @@ export default function CreateCompany() {
 //                 >
 //                     Create Company
 //                 </button>
-//             </form>
+//             </Form>
 //         </div>
 //     );
 // }
