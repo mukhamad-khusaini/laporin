@@ -34,29 +34,17 @@ class CompanyController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama_usaha' => 'required|string|max:255',
+            'nama_usaha' => [
+                'required',
+                'string',
+                'regex:/^[a-zA-Z0-9_ ]+$/'
+            ],
             'jenis_usaha' => 'required|in:jasa,dagang,manufaktur',
-            'akun_default' => 'nullable|array', // jika kamu kirim array akun
+            'akun_default' => 'array',
         ]);
 
-        $company = Company::create([
-            'user_id' => Auth::user()->id,
-            'name' => $request->nama_usaha,
-            'company_type' => $request->jenis_usaha,
-        ]);
-
-        // Simpan akun default
-        if ($request->filled('akun_default')) {
-            foreach ($request->akun_default as $akun) {
-                $company->accounts()->create([
-                    'name' => $akun['name'],
-                    'account_code' => $akun['code'],
-                    'account_type_id' => $akun['type_id'],
-                    'company_id' => $company->id,
-                    'is_active' => true,
-                ]);
-            }
-        }
+        // Store and return company
+        Company::createWithAccounts($request->all(), Auth::id());
 
         return redirect('/dashboard');
     }

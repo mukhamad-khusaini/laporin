@@ -16,6 +16,7 @@ class Account extends Model
         'is_active'
     ];
 
+
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);

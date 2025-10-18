@@ -1,7 +1,7 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import TailwindTable from "../utils/TailwindTable";
 
-export default function Pembelian() {
+export default function PenjualanTunai() {
     const columns = [
         { header: "Name", accessor: "name" },
         { header: "Position", accessor: "position" },
@@ -12,10 +12,16 @@ export default function Pembelian() {
     ];
 
     return (
-        <AuthenticatedLayout title="Pembelian">
-            <h2 className="text-2xl font-bold px-6 py-3 mb-4">Pembelian</h2>
+        <AuthenticatedLayout title="Penjualan Tunai">
+            <h2 className="text-2xl font-bold px-6 py-3 mb-4">
+                Penjualan Tunai
+            </h2>
             <div className="px-6 py-3">
-                <TailwindTable columns={columns} jsonUrl="./data.json" />
+                <TailwindTable
+                    transaksi="Penjualan"
+                    columns={columns}
+                    data="./data.json"
+                />
             </div>
         </AuthenticatedLayout>
     );

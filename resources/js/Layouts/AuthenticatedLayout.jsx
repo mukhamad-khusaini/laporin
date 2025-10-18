@@ -2,7 +2,7 @@ import { Link, usePage, router, Head } from "@inertiajs/react";
 import { useState, useRef, useEffect } from "react";
 
 export default function AuthenticatedLayout({ title, children }) {
-    const user = usePage().props.auth.user;
+    const { user } = usePage().props.auth;
     const [showMenu, setShowMenu] = useState(false);
     const menuRef = useRef(null);
 
@@ -42,7 +42,7 @@ export default function AuthenticatedLayout({ title, children }) {
                             className="w-8 aspect-square mr-3"
                         />
                         <h1 className="text-xl font-bold">
-                            Laporin | Aplikasi UMKM
+                            Laporin | {user.company.name}
                         </h1>
                     </div>
 
@@ -100,13 +100,13 @@ export default function AuthenticatedLayout({ title, children }) {
                             }`}
                         >
                             <Link
-                                href="/pembelian"
+                                href="/pembelian-kredit"
                                 className="text-white block px-6 py-2 text-sm hover:bg-gray-700 bg-gray-900"
                             >
                                 Transaksi Kredit
                             </Link>
                             <Link
-                                href="/pembelian/tunai"
+                                href="/pembelian-tunai"
                                 className="text-white block px-6 py-2 text-sm hover:bg-gray-700 bg-gray-900"
                             >
                                 Transaksi Tunai
@@ -120,7 +120,9 @@ export default function AuthenticatedLayout({ title, children }) {
                             onClick={() => toggleMenu("penjualan")}
                             className="text-white w-full text-left px-4 py-2 rounded hover:bg-gray-700"
                         >
-                            Penjualan
+                            {user.company.company_type == "jasa"
+                                ? "Pendapatan"
+                                : "Penjualan"}
                         </button>
                         <div
                             className={`overflow-hidden transition-all duration-300 ease-in-out ${
@@ -130,13 +132,13 @@ export default function AuthenticatedLayout({ title, children }) {
                             }`}
                         >
                             <Link
-                                href="/penjualan/kredit"
+                                href="/penjualan-kredit"
                                 className="text-white block px-6 py-2 text-sm hover:bg-gray-700 bg-gray-900"
                             >
                                 Transaksi Kredit
                             </Link>
                             <Link
-                                href="/penjualan/tunai"
+                                href="/penjualan-tunai"
                                 className="text-white block px-6 py-2 text-sm hover:bg-gray-700 bg-gray-900"
                             >
                                 Transaksi Tunai
@@ -164,25 +166,25 @@ export default function AuthenticatedLayout({ title, children }) {
                             }`}
                         >
                             <Link
-                                href=""
+                                href="/modal"
                                 className="text-white block px-6 py-2 text-sm hover:bg-gray-700 bg-gray-900"
                             >
                                 Modal
                             </Link>
                             <Link
-                                href=""
+                                href="/utang"
                                 className="text-white block px-6 py-2 text-sm hover:bg-gray-700 bg-gray-900"
                             >
                                 Utang
                             </Link>
                             <Link
-                                href=""
+                                href="/prive"
                                 className="text-white block px-6 py-2 text-sm hover:bg-gray-700 bg-gray-900"
                             >
                                 Prive
                             </Link>
                             <Link
-                                href=""
+                                href="/piutang"
                                 className="text-white block px-6 py-2 text-sm hover:bg-gray-700 bg-gray-900"
                             >
                                 Piutang

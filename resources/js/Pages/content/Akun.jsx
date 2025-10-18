@@ -1,9 +1,7 @@
 import TailwindTable from "../utils/TailwindTable";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head } from "@inertiajs/react";
 
-export default function Akun(props) {
-    console.log(props.data);
+export default function Akun({ data }) {
     const columns = [
         { header: "Kode Akun", accessor: "account_code" },
         { header: "Nama Akun", accessor: "name" },
@@ -29,21 +27,6 @@ export default function Akun(props) {
         },
     ];
 
-    const data = [
-        { no: 1, nama: "Kas", deskripsi: "Akun kas untuk transaksi tunai" },
-        {
-            no: 2,
-            nama: "Piutang Usaha",
-            deskripsi: "Akun piutang dari pelanggan",
-        },
-        {
-            no: 3,
-            nama: "Persediaan",
-            deskripsi: "Akun barang dagang yang tersedia",
-        },
-        { no: 4, nama: "Modal", deskripsi: "Akun modal pemilik usaha" },
-    ];
-
     const handleEdit = (row) => {
         console.log("Edit akun:", row);
         // Tambahkan navigasi atau modal edit
@@ -55,11 +38,10 @@ export default function Akun(props) {
     };
 
     return (
-        <AuthenticatedLayout>
-            <Head title="Akun" />
+        <AuthenticatedLayout title="Akun">
             <div className="p-6 space-y-6">
                 <h2 className="text-2xl font-bold text-gray-800">Akun</h2>
-                <TailwindTable columns={columns} data={props.data} />
+                <TailwindTable columns={columns} data={data} />
             </div>
         </AuthenticatedLayout>
     );

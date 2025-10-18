@@ -1,6 +1,10 @@
 import { useState, useEffect, useMemo } from "react";
 
-export default function TailwindTable({ columns, data: rawInput }) {
+export default function TailwindTable({
+    columns,
+    data: rawInput,
+    transaksi = null,
+}) {
     const [data, setData] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [entriesPerPage, setEntriesPerPage] = useState(10);
@@ -51,7 +55,7 @@ export default function TailwindTable({ columns, data: rawInput }) {
                             setEntriesPerPage(Number(e.target.value));
                             setCurrentPage(1);
                         }}
-                        className="border rounded px-2 py-1 text-sm"
+                        className="border rounded px-2 py-1 text-sm w-14"
                     >
                         {[5, 10, 25, 50].map((num) => (
                             <option key={num} value={num}>
@@ -60,16 +64,30 @@ export default function TailwindTable({ columns, data: rawInput }) {
                         ))}
                     </select>
                 </div>
-                <input
-                    type="text"
-                    placeholder="Search..."
-                    className="border rounded px-3 py-1 text-sm w-1/3"
-                    value={searchTerm}
-                    onChange={(e) => {
-                        setSearchTerm(e.target.value);
-                        setCurrentPage(1);
-                    }}
-                />
+                <div className="flex justify-end w-3/6">
+                    {transaksi && (
+                        <button
+                            onClick={console.log("tambah")}
+                            className="mr-4 flex items-center bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700 transition"
+                        >
+                            <span className="mr-2">
+                                Tambah transaksi {transaksi}
+                            </span>
+                            <span className="text-lg font-bold">+</span>
+                        </button>
+                    )}
+
+                    <input
+                        type="text"
+                        placeholder="Search..."
+                        className="border rounded px-3 py-1 text-sm w-60"
+                        value={searchTerm}
+                        onChange={(e) => {
+                            setSearchTerm(e.target.value);
+                            setCurrentPage(1);
+                        }}
+                    />
+                </div>
             </div>
 
             {/* Table */}
@@ -85,20 +103,34 @@ export default function TailwindTable({ columns, data: rawInput }) {
                         </tr>
                     </thead>
                     <tbody className="text-sm text-gray-800">
-                        {paginatedData.map((row, idx) => (
-                            <tr key={idx} className="border-t">
-                                {columns.map((col) => (
-                                    <td
-                                        key={col.accessor}
-                                        className="px-4 py-2"
-                                    >
-                                        {col.Cell
-                                            ? col.Cell({ row })
-                                            : row[col.accessor]}
-                                    </td>
-                                ))}
+                        {data.length === 0 ? (
+                            <tr>
+                                <td
+                                    colSpan={columns.length}
+                                    className="text-center py-6 text-gray-500"
+                                >
+                                    <span className="italic">
+                                        Belum ada data
+                                    </span>{" "}
+                                    😕
+                                </td>
                             </tr>
-                        ))}
+                        ) : (
+                            paginatedData.map((row, idx) => (
+                                <tr key={idx} className="border-t">
+                                    {columns.map((col) => (
+                                        <td
+                                            key={col.accessor}
+                                            className="px-4 py-2"
+                                        >
+                                            {col.Cell
+                                                ? col.Cell({ row })
+                                                : row[col.accessor]}
+                                        </td>
+                                    ))}
+                                </tr>
+                            ))
+                        )}
                     </tbody>
                 </table>
             </div>

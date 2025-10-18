@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CompanyController;
 use App\Http\Middleware\EnsureUserHasCompany;
 use App\Models\Account;
+use App\Models\Company;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 
@@ -18,10 +20,6 @@ Route::get('/', function () {
     ]);
 });
 
-// Route::get('/dashboard', function () {
-//     return Inertia::render('Dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::get("/dashboard", function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified', EnsureUserHasCompany::class])->name('dashboard');
@@ -32,9 +30,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/pembelian', function () { 
-    return Inertia::render('content/Pembelian');
-})->name('pembelian');
+Route::get('/pembelian-tunai', function () { 
+    return Inertia::render('content/PembelianTunai');
+})->name('pembelian.tunai');
+
+Route::get('/pembelian-kredit', function () { 
+    return Inertia::render('content/PembelianKredit');
+})->name('pembelian.kredit');
 
 Route::get('/akun', function () { 
     return Inertia::render('content/Akun',['data'=>Account::all()]);
