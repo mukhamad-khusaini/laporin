@@ -15,6 +15,19 @@ return new class extends Migration
             $table->id();
             $table->foreignId('company_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->enum('transaction_category', [
+                'pembelian.tunai',
+                'pembelian.kredit',
+                'penjualan.tunai',
+                'penjualan.kredit',
+                'produksi',
+                'modal',
+                'utang',
+                'prive',
+                'piutang',
+                'beban',
+                'penyesuaian'
+            ]);
             $table->string('description');
             $table->timestamp('transaction_date');
             $table->timestamps();

@@ -21,4 +21,9 @@ class TransactionDetail extends Model
     {
         return $this->belongsTo(Account::class);
     }
+
+    public function subLedger()
+    {
+        return $this->belongsTo(SubLedger::class);
+    }
 }
