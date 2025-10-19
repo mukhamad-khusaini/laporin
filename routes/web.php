@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\ContentController;
 use App\Models\Account;
 use Inertia\Inertia;
 
@@ -25,18 +26,38 @@ Route::middleware('auth')->group(function () {
 
 // This app router
 Route::middleware(['auth'])->group(function(){
-    Route::get("/dashboard", function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
-    Route::get('/pembelian-tunai', function () { 
-        return Inertia::render('content/PembelianTunai');
-    })->name('pembelian.tunai');
-    Route::get('/pembelian-kredit', function () { 
-        return Inertia::render('content/PembelianKredit');
-    })->name('pembelian.kredit');
-    Route::get('/akun', function () { 
-        return Inertia::render('content/Akun',['data'=>Account::all()]);
-    })->name('akun');
+    // Dashboard
+    Route::get("/dashboard", [ContentController::class,'dashboardShow'])->name('dashboard');
+
+    // Pembelian
+    Route::get('/pembelian-tunai', [ContentController::class,'pembelianTunaiShow'])->name('pembelian.tunai');
+    Route::get('/pembelian-kredit', [ContentController::class,'pembelianKreditShow'])->name('pembelian.kredit');
+
+    // Penjualan
+    Route::get('/penjualan-tunai', [ContentController::class,'penjualanTunaiShow'])->name('penjualan.tunai');
+    Route::get('/penjualan-kredit', [ContentController::class,'penjualanKreditShow'])->name('penjualan.kredit');
+
+    // Produksi
+    Route::get('/produksi', [ContentController::class,'produksiShow'])->name('produksi');
+
+    // Transaksi Kas
+    Route::get('/modal', [ContentController::class,'modalShow'])->name('modal');
+    Route::get('/utang', [ContentController::class,'utangShow'])->name('utang');
+    Route::get('/piutang', [ContentController::class,'piutangShow'])->name('piutang');
+    Route::get('/beban', [ContentController::class,'bebanShow'])->name('beban');
+    Route::get('/prive', [ContentController::class,'priveShow'])->name('prive');
+
+    // Akun
+    Route::get('/akun', [ContentController::class,'akunShow'])->name('akun');
+
+    // Penyesuaian
+    Route::get('/penyesuaian', [ContentController::class,'penyesuaianShow'])->name('penyesuaian');
+    
+    // Vendor
+    Route::get('/vendor', [ContentController::class,'vendorShow'])->name('vendor');
+
+    // LAPORIN
+    Route::get('/laporin', [ContentController::class,'laporinShow'])->name('laporin');
 });
 
 Route::resource('company', CompanyController::class);

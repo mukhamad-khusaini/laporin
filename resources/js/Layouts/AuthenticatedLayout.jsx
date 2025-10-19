@@ -146,9 +146,12 @@ export default function AuthenticatedLayout({ title, children }) {
                         </div>
                     </div>
 
-                    <button class="text-white text-left bg-gray-800 hover:bg-gray-600 py-2 px-4 rounded w-full">
+                    <Link
+                        href="/produksi"
+                        class="text-white text-left bg-gray-800 hover:bg-gray-600 py-2 px-4 rounded w-full"
+                    >
                         Produksi
-                    </button>
+                    </Link>
 
                     {/* Transaksi Kas */}
                     <div>
@@ -161,7 +164,7 @@ export default function AuthenticatedLayout({ title, children }) {
                         <div
                             className={`overflow-hidden transition-all duration-300 ease-in-out ${
                                 openMenu === "kas"
-                                    ? "max-h-40 opacity-100"
+                                    ? "max-h-60 opacity-100"
                                     : "max-h-0 opacity-0"
                             }`}
                         >
@@ -189,6 +192,12 @@ export default function AuthenticatedLayout({ title, children }) {
                             >
                                 Piutang
                             </Link>
+                            <Link
+                                href="/beban"
+                                className="text-white block px-6 py-2 text-sm hover:bg-gray-700 bg-gray-900"
+                            >
+                                Beban
+                            </Link>
                         </div>
                     </div>
                     <Link
@@ -197,15 +206,24 @@ export default function AuthenticatedLayout({ title, children }) {
                     >
                         Akun
                     </Link>
-                    <button class="text-white text-left bg-gray-800 hover:bg-gray-600 py-2 px-4 rounded w-full">
+                    <Link
+                        href="/penyesuaian"
+                        class="text-white text-left bg-gray-800 hover:bg-gray-600 py-2 px-4 rounded w-full"
+                    >
                         Penyesuaian
-                    </button>
-                    <button class="text-white text-left bg-gray-800 hover:bg-gray-600 py-2 px-4 rounded w-full">
+                    </Link>
+                    <Link
+                        href="/vendor"
+                        class="text-white text-left bg-gray-800 hover:bg-gray-600 py-2 px-4 rounded w-full"
+                    >
                         Vendor
-                    </button>
-                    <button class="text-white text-left bg-blue-800 hover:bg-gray-600 py-2 px-4 rounded w-full">
+                    </Link>
+                    <Link
+                        href="/laporin"
+                        class="text-white text-left bg-blue-800 hover:bg-gray-600 py-2 px-4 rounded w-full"
+                    >
                         Laporin
-                    </button>
+                    </Link>
                 </aside>
 
                 <main className="w-[85vw] mt-16">{children}</main>
