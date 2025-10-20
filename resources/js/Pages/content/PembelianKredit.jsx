@@ -1,14 +1,22 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import TailwindTable from "../utils/TailwindTable";
+import TransactionTable from "../utils/TransactionTable";
 
-export default function PembelianKredit() {
+export default function PembelianKredit({ data }) {
+    console.log(data.original);
+
     const columns = [
-        { header: "Name", accessor: "name" },
-        { header: "Position", accessor: "position" },
-        { header: "Office", accessor: "office" },
-        { header: "Extn.", accessor: "extn" },
-        { header: "Start Date", accessor: "start_date" },
-        { header: "Salary", accessor: "salary" },
+        {
+            header: "No.",
+            accessor: "no",
+            Cell: ({ globalIndex }) => globalIndex,
+        },
+        { header: "Tanggal", accessor: "transaction_date" },
+        { header: "Akun", accessor: "account" },
+        { header: "Debit", accessor: "debit" },
+        { header: "Kredit", accessor: "credit" },
+        { header: "Sub", accessor: "sub_ledger" },
+        { header: "Keterangan", accessor: "description" },
     ];
 
     return (
@@ -17,11 +25,7 @@ export default function PembelianKredit() {
                 Pembelian Kredit
             </h2>
             <div className="px-6 py-3">
-                <TailwindTable
-                    transaksi="Pembelian"
-                    columns={columns}
-                    data="./data.json"
-                />
+                <TransactionTable data={data.original} />
             </div>
         </AuthenticatedLayout>
     );

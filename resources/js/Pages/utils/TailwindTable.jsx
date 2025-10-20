@@ -67,7 +67,7 @@ export default function TailwindTable({
                 <div className="flex justify-end w-3/6">
                     {transaksi && (
                         <button
-                            onClick={console.log("tambah")}
+                            onClick={() => console.log("tambah")}
                             className="mr-4 flex items-center bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700 transition"
                         >
                             <span className="mr-2">
@@ -124,7 +124,15 @@ export default function TailwindTable({
                                             className="px-4 py-2"
                                         >
                                             {col.Cell
-                                                ? col.Cell({ row })
+                                                ? col.Cell({
+                                                      row,
+                                                      rowIndex: idx,
+                                                      globalIndex:
+                                                          (currentPage - 1) *
+                                                              entriesPerPage +
+                                                          idx +
+                                                          1,
+                                                  })
                                                 : row[col.accessor]}
                                         </td>
                                     ))}

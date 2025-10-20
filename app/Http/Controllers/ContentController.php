@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Account;
+use App\Models\TransactionDetail;
 use Inertia\Inertia;
 
 class ContentController extends Controller
@@ -14,7 +15,8 @@ class ContentController extends Controller
 
     public function pembelianKreditShow()
     {
-        return Inertia::render('content/PembelianKredit');
+        $data = TransactionDetail::getPembelianKreditJson();
+        return Inertia::render('content/PembelianKredit',['data'=> $data]);
     }
 
     public function pembelianTunaiShow()

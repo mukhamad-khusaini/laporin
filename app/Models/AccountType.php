@@ -10,7 +10,7 @@ class AccountType extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'normal_balance'];
+    protected $fillable = ['id','name', 'normal_balance'];
 
     public function accounts(): HasMany
     {
