@@ -44,33 +44,6 @@ class TransactionDetail extends Model
         ]);
     }
 
-    public static function getPembelianKreditGrouped()
-    {
-        $headers = TransactionHeader::with([
-            'details.account',
-            'details.subLedger'
-        ])
-        ->where('transaction_category', 'pembelian.kredit')
-        ->orderBy('transaction_date', 'desc')
-        ->get()
-        ->map(function ($header) {
-            return [
-                'tanggal' => $header->transaction_date->format('Y-m-d'),
-                'deskripsi' => $header->description,
-                'details' => $header->details->map(function ($detail) {
-                    return [
-                        'account' => $detail->account->name ?? '-',
-                        'debit' => floatval($detail->debit),
-                        'credit' => floatval($detail->credit),
-                        'sub_ledger' => $detail->subLedger->name ?? '-',
-                        'description' => $detail->transactionHeader->description ?? '-',
-                    ];
-                }),
-            ];
-        });
-
-        return $headers;
-    }
 
     public function transaction(): BelongsTo
     {
