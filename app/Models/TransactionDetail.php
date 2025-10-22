@@ -13,39 +13,38 @@ class TransactionDetail extends Model
 
     protected $fillable = ['transaction_header_id', 'account_id', 'debit', 'credit'];
 
-    public static function getPembelianKreditJson()
+    public static function getPembelianKredit()
     {
-        $headers = TransactionHeader::with([
-            'details.account',
-            'details.subLedger'
+        return Self::with([
+            'account',
+            'subLedger',
+            'transactionHeader.details.subLedger', // preload semua detail untuk akses vendor
         ])
-        ->where('transaction_category', 'pembelian.kredit')
-        ->orderBy('transaction_date', 'desc')
+        ->whereHas('transactionHeader', function ($q) {
+            $q->where('transaction_category', 'pembelian.kredit');
+        })
+        ->where('debit', '>', 0) // hanya ambil akun pembelian
+        ->orderByDesc('transaction_header_id')
         ->get()
-        ->map(function ($header) {
-            $akunGabungan = $header->details->map(function ($detail) {
-                return [
-                    'account' => $detail->account->name ?? '-',
-                    'debit' => floatval($detail->debit),
-                    'credit' => floatval($detail->credit),
-                    'sub_ledger' => $detail->subLedger->name ?? null,
-                ];
-            });
-    
+        ->map(function ($detail) {
+            // Cari detail lain dalam transaksi yang sama yang posisinya kredit
+            $vendorDetail = $detail->transactionHeader->details
+                ->where('credit', '>', 0)
+                ->first();
+
             return [
-                'transaction_date' => $header->transaction_date->format('Y-m-d'),
-                'description' => $header->description,
-                'details' => $akunGabungan,
+                'transaction_date' => $detail->transactionHeader->transaction_date->format('Y-m-d'),
+                'sub_ledger' => $detail->subLedger->name ?? '-',
+                'total' => floatval($detail->debit),
+                'vendor' => $vendorDetail?->subLedger?->name ?? '-',
+                'account_type' => $detail->account->name ?? '-',
             ];
         });
-    
-        return response()->json([
-            'data' => $headers,
-        ]);
     }
 
 
-    public function transaction(): BelongsTo
+
+    public function transactionHeader(): BelongsTo
     {
         return $this->belongsTo(TransactionHeader::class, 'transaction_header_id');
     }

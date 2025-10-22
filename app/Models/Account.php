@@ -22,7 +22,7 @@ class Account extends Model
         return $this->belongsTo(Company::class);
     }
 
-    public function type(): BelongsTo
+    public function accountType(): BelongsTo
     {
         return $this->belongsTo(AccountType::class, 'account_type_id');
     }

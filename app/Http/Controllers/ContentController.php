@@ -15,7 +15,7 @@ class ContentController extends Controller
 
     public function pembelianKreditShow()
     {
-        $data = TransactionDetail::getPembelianKreditJson();
+        $data = TransactionDetail::getPembelianKredit();
         return Inertia::render('content/PembelianKredit',['data'=> $data]);
     }
 
