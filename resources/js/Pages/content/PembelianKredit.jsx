@@ -27,6 +27,12 @@ export default function PembelianKredit({ data }) {
             <div className="px-6 py-3">
                 <TransactionTable
                     akunOptions={akunOptions}
+                    actionEdit={"pembelian-kredit.update"}
+                    actionDelete={"pembelian-kredit.destroy"}
+                    subLedgers={subLedgers}
+                    setSubLedgers={(data) => setSubLedgers(data)}
+                    vendors={vendors}
+                    setVendors={(data) => setVendors(data)}
                     data={data}
                     onAddTransaksi={() => popupHendler(true)}
                 />
@@ -34,6 +40,8 @@ export default function PembelianKredit({ data }) {
 
             <TransaksiPopup
                 title="Transaksi Pembelian Kredit"
+                action="/pembelian-kredit"
+                buttonType="Tambah"
                 akunOptions={["Peralatan", "Bahan Baku"]}
                 subLedgers={subLedgers}
                 vendors={vendors}

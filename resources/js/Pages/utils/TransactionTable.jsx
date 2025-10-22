@@ -1,13 +1,31 @@
 import { useState, useEffect, useMemo } from "react";
+import TransaksiPopup from "./TransaksiPopup";
+import { useForm } from "@inertiajs/react";
 
 export default function PembelianKreditTable({
     data: rawInput,
     akunOptions = [],
+    subLedgers = [],
+    setSubLedgers,
+    vendors = [],
+    setVendors,
+    actionEdit,
+    actionDelete,
     onAddTransaksi = () => console.log("tambah"),
 }) {
     const [data, setData] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedAkun, setSelectedAkun] = useState("");
+    const [editData, setEditData] = useState(null);
+    const [deleteData, setDeleteData] = useState(null);
+
+    // Form untuk delete
+    const { delete: destroy } = useForm();
+
+    const handleDeleteSubmit = () => {
+        destroy(route(actionDelete, { id: deleteData.id }));
+        setDeleteData(null);
+    };
 
     // Normalisasi data
     useEffect(() => {
@@ -94,6 +112,7 @@ export default function PembelianKreditTable({
                                 Total Pembelian
                             </th>
                             <th className="px-4 py-2">Vendor</th>
+                            <th className="px-4 py-2 text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody className="text-sm text-gray-800">
@@ -135,12 +154,84 @@ export default function PembelianKreditTable({
                                     <td className="px-4 py-2">
                                         {row.vendor ?? "-"}
                                     </td>
+                                    <td className="px-4 py-2 text-center space-x-2">
+                                        <button
+                                            onClick={() => setEditData(row)}
+                                            className="inline-flex items-center px-3 py-1 text-sm font-medium 
+               text-white bg-blue-600 rounded hover:bg-blue-700 transition"
+                                        >
+                                            ✏️ Edit
+                                        </button>
+                                        <button
+                                            onClick={() => setDeleteData(row)}
+                                            className="inline-flex items-center px-3 py-1 text-sm font-medium 
+               text-white bg-red-600 rounded hover:bg-red-700 transition"
+                                        >
+                                            🗑️ Hapus
+                                        </button>
+                                    </td>
                                 </tr>
                             ))
                         )}
                     </tbody>
                 </table>
             </div>
+
+            {editData && (
+                <TransaksiPopup
+                    title="Edit Transaksi"
+                    action={actionEdit}
+                    buttonType="Edit"
+                    akunOptions={akunOptions}
+                    subLedgers={subLedgers}
+                    vendors={vendors}
+                    show={editData}
+                    onClose={() => setEditData(null)}
+                    onAddSubLedger={(newItem) =>
+                        setSubLedgers([...subLedgers, newItem.name])
+                    }
+                    onAddVendor={(newVendor) =>
+                        setVendors([...vendors, newVendor])
+                    }
+                    initialData={editData}
+                    isEdit={true}
+                />
+            )}
+            {deleteData && (
+                <div>
+                    <div
+                        className="fixed inset-0 bg-black bg-opacity-50 z-40"
+                        onClick={() => setDeleteData(null)}
+                    />
+                    <div
+                        className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
+                    bg-white rounded-[10px] shadow-2xl z-50 w-[400px] max-w-full p-4 space-y-4"
+                    >
+                        <h3 className="text-lg font-semibold text-red-600">
+                            Hapus Transaksi?
+                        </h3>
+                        <p className="text-sm text-gray-700">
+                            Anda yakin ingin menghapus transaksi{" "}
+                            <strong>{deleteData.sub_ledger}</strong> dari vendor{" "}
+                            <strong>{deleteData.vendor}</strong>?
+                        </p>
+                        <div className="flex justify-end space-x-2">
+                            <button
+                                onClick={() => setDeleteData(null)}
+                                className="px-4 py-1 border rounded text-sm"
+                            >
+                                Batal
+                            </button>
+                            <button
+                                onClick={handleDeleteSubmit}
+                                className="px-4 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700"
+                            >
+                                Hapus
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

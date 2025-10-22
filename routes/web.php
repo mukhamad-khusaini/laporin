@@ -5,6 +5,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ContentController;
+use App\Http\Controllers\PembelianKreditController;
 use App\Http\Controllers\TransactionController;
 use Inertia\Inertia;
 
@@ -31,8 +32,7 @@ Route::middleware(['auth'])->group(function(){
 
     // Pembelian
     Route::get('/pembelian-tunai', [ContentController::class,'pembelianTunaiShow'])->name('pembelian.tunai');
-    Route::get('/pembelian-kredit', [ContentController::class,'pembelianKreditShow'])->name('pembelian.kredit');
-    Route::post('/pembelian-kredit/tambahTransaksi', [TransactionController::class, 'store']);
+    Route::resource('pembelian-kredit', PembelianKreditController::class);
 
     // Penjualan
     Route::get('/penjualan-tunai', [ContentController::class,'penjualanTunaiShow'])->name('penjualan.tunai');

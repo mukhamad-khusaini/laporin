@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Account;
-use App\Models\TransactionDetail;
 use Inertia\Inertia;
 
 class ContentController extends Controller
@@ -13,11 +12,7 @@ class ContentController extends Controller
         return Inertia::render('Dashboard');
     }
 
-    public function pembelianKreditShow()
-    {
-        $data = TransactionDetail::getPembelianKredit();
-        return Inertia::render('content/PembelianKredit',['data'=> $data]);
-    }
+    
 
     public function pembelianTunaiShow()
     {

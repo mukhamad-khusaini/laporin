@@ -1,26 +1,44 @@
 import { useForm } from "@inertiajs/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function TransaksiPopup({
     title,
+    action,
+    buttonType,
     akunOptions,
     subLedgers = [],
     vendors = [],
     show,
+    initialData,
     onClose,
     onAddSubLedger,
     onAddVendor,
+    isEdit = false,
 }) {
     const [showBarangPopup, setShowBarangPopup] = useState(false);
     const [showVendorPopup, setShowVendorPopup] = useState(false);
 
-    const { data, setData, post, processing } = useForm({
+    const { data, setData, post, put, processing } = useForm({
+        id: "",
         account: "",
         sub_ledger: "",
         amount: "",
         vendor: "",
         transaction_date: new Date().toISOString().slice(0, 16),
     });
+
+    useEffect(() => {
+        if (initialData) {
+            setData({
+                id: initialData.id ?? "",
+                account: initialData.account_type ?? "",
+                sub_ledger: initialData.sub_ledger ?? "",
+                amount: initialData.total ?? "",
+                vendor: initialData.vendor ?? "",
+                transaction_date: initialData.transaction_date ?? "",
+            });
+        }
+    }, [initialData]);
 
     const handleSubmit = () => {
         // Validasi wajib
@@ -40,7 +58,11 @@ export default function TransaksiPopup({
             return;
         }
 
-        post("/pembelian-kredit/tambahTransaksi");
+        if (isEdit) {
+            put(route(action, { id: data.id }));
+        } else {
+            post(action);
+        }
     };
 
     return (
@@ -52,9 +74,9 @@ export default function TransaksiPopup({
             />
 
             {/* Main Popup */}
-            <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-[10px] shadow-lg z-50 w-[500px] max-w-full">
+            <div className="overflow-hidden fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-[5px] shadow-lg z-50 w-[500px] max-w-full">
                 {/* Header */}
-                <div className="flex justify-between items-center px-4 py-3 border-b">
+                <div className="flex justify-between items-center px-4 py-3 border-b bg-gray-100">
                     <h2 className="text-lg font-semibold">{title}</h2>
                     <button
                         onClick={onClose}
@@ -188,7 +210,9 @@ export default function TransaksiPopup({
                         disabled={processing}
                         className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition"
                     >
-                        {processing ? "Menyimpan......" : "Tambah Transaksi"}
+                        {processing
+                            ? "Menyimpan......"
+                            : buttonType + "Transaksi"}
                     </button>
                 </div>
             </div>

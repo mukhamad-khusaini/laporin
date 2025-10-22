@@ -33,6 +33,7 @@ class TransactionDetail extends Model
                 ->first();
 
             return [
+                'id'=> $detail->transactionHeader->id,
                 'transaction_date' => $detail->transactionHeader->transaction_date->format('Y-m-d'),
                 'sub_ledger' => $detail->subLedger->name ?? '-',
                 'total' => floatval($detail->debit),
