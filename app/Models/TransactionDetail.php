@@ -11,7 +11,7 @@ class TransactionDetail extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['transaction_header_id', 'account_id', 'debit', 'credit'];
+    protected $fillable = ['transaction_header_id', 'account_id', 'debit', 'credit', 'sub_ledger_id'];
 
     public static function getPembelianKredit()
     {

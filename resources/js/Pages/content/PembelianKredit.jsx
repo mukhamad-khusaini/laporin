@@ -2,14 +2,14 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import TransactionTable from "../utils/TransactionTable";
 import { useState } from "react";
 import TransaksiPopup from "../utils/TransaksiPopup";
+import FlashMessage from "../utils/FlashMessage";
 
-export default function PembelianKredit({ data }) {
+export default function PembelianKredit({ data, sub_ledgers, vendors }) {
     const [popup, setPopup] = useState(false);
-    const [subLedgers, setSubLedgers] = useState(["Mesin Jahit", "Kain Katun"]);
-    const [vendors, setVendors] = useState([
-        "CV Maju Jaya",
-        "Toko Sumber Rejeki",
-    ]);
+    const [subLedgers, setSubLedgers] = useState(sub_ledgers);
+    const [vendorNames, setVendorNames] = useState(vendors);
+
+    console.log(sub_ledgers, vendors);
 
     function popupHendler(state) {
         setPopup(state);
@@ -21,6 +21,7 @@ export default function PembelianKredit({ data }) {
 
     return (
         <AuthenticatedLayout title="Pembelian Kredit">
+            <FlashMessage />
             <h2 className="text-2xl font-bold px-6 py-3 mb-4">
                 Pembelian Kredit
             </h2>
@@ -31,8 +32,8 @@ export default function PembelianKredit({ data }) {
                     actionDelete={"pembelian-kredit.destroy"}
                     subLedgers={subLedgers}
                     setSubLedgers={(data) => setSubLedgers(data)}
-                    vendors={vendors}
-                    setVendors={(data) => setVendors(data)}
+                    vendors={vendorNames}
+                    setVendors={(data) => setVendorNames(data)}
                     data={data}
                     onAddTransaksi={() => popupHendler(true)}
                 />
@@ -42,15 +43,17 @@ export default function PembelianKredit({ data }) {
                 title="Transaksi Pembelian Kredit"
                 action="/pembelian-kredit"
                 buttonType="Tambah"
-                akunOptions={["Peralatan", "Bahan Baku"]}
+                akunOptions={akunOptions}
                 subLedgers={subLedgers}
-                vendors={vendors}
+                vendors={vendorNames}
                 show={popup}
                 onClose={() => popupHendler(false)}
                 onAddSubLedger={(newItem) =>
                     setSubLedgers([...subLedgers, newItem.name])
                 }
-                onAddVendor={(newVendor) => setVendors([...vendors, newVendor])}
+                onAddVendor={(newVendor) =>
+                    setVendorNames([...vendorNames, newVendor])
+                }
             />
         </AuthenticatedLayout>
     );

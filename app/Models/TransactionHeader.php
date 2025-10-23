@@ -11,7 +11,7 @@ class TransactionHeader extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['company_id', 'user_id', 'description', 'transaction_date'];
+    protected $fillable = ['company_id', 'user_id', 'description', 'transaction_date', 'transaction_category'];
 
     protected $casts = [
         'transaction_date' => 'datetime',

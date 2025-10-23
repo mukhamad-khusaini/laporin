@@ -25,6 +25,7 @@ export default function TransaksiPopup({
         amount: "",
         vendor: "",
         transaction_date: new Date().toISOString().slice(0, 16),
+        description: "Pembelian kredit",
     });
 
     useEffect(() => {
@@ -36,6 +37,7 @@ export default function TransaksiPopup({
                 amount: initialData.total ?? "",
                 vendor: initialData.vendor ?? "",
                 transaction_date: initialData.transaction_date ?? "",
+                description: initialData.description ?? "Pembelian kredit",
             });
         }
     }, [initialData]);
@@ -58,10 +60,35 @@ export default function TransaksiPopup({
             return;
         }
 
+        if (!data.transaction_date) {
+            alert("Waktu transaksi wajib diisi.");
+            return;
+        }
+
         if (isEdit) {
-            put(route(action, { id: data.id }));
+            put(route(action, { id: data.id }), {
+                onSuccess: () => {
+                    onClose(); // ← Tutup pop-up
+                },
+                onError: () => {
+                    onClose();
+                },
+            });
         } else {
-            post(action);
+            post(action, {
+                onSuccess: () => {
+                    onClose(); // ← Tutup pop-up
+                    setData({
+                        id: "",
+                        account: "",
+                        sub_ledger: "",
+                        amount: "",
+                        vendor: "",
+                        transaction_date: new Date().toISOString().slice(0, 16),
+                        description: "Pembelian kredit",
+                    });
+                },
+            });
         }
     };
 
@@ -186,6 +213,21 @@ export default function TransaksiPopup({
                             </div>
                         </div>
                     )}
+
+                    {/* Deskripsi transaksi */}
+                    <div className="space-y-1">
+                        <label className="text-sm text-gray-700">
+                            Deskripsi Transaksi{" "}
+                        </label>
+                        <textarea
+                            value={data.description}
+                            onChange={(e) =>
+                                setData("description", e.target.value)
+                            }
+                            placeholder="Contoh: Pembelian mesin jahit untuk produksi"
+                            className="border rounded px-3 py-2 w-full resize-none"
+                        />
+                    </div>
 
                     {/* Tanggal transaksi */}
                     <div className="space-y-1">
