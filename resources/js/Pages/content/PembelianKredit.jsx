@@ -4,20 +4,19 @@ import { useState } from "react";
 import TransaksiPopup from "../utils/TransaksiPopup";
 import FlashMessage from "../utils/FlashMessage";
 
-export default function PembelianKredit({ data, sub_ledgers, vendors }) {
+export default function PembelianKredit({
+    data,
+    sub_ledgers,
+    vendors,
+    account_options,
+}) {
     const [popup, setPopup] = useState(false);
     const [subLedgers, setSubLedgers] = useState(sub_ledgers);
     const [vendorNames, setVendorNames] = useState(vendors);
 
-    console.log(sub_ledgers, vendors);
-
     function popupHendler(state) {
         setPopup(state);
     }
-
-    const akunOptions = Array.from(
-        new Set(data.map((item) => item.account_type))
-    ).filter(Boolean);
 
     return (
         <AuthenticatedLayout title="Pembelian Kredit">
@@ -27,7 +26,7 @@ export default function PembelianKredit({ data, sub_ledgers, vendors }) {
             </h2>
             <div className="px-6 py-3">
                 <TransactionTable
-                    akunOptions={akunOptions}
+                    akunOptions={account_options}
                     actionEdit={"pembelian-kredit.update"}
                     actionDelete={"pembelian-kredit.destroy"}
                     subLedgers={subLedgers}
@@ -43,7 +42,7 @@ export default function PembelianKredit({ data, sub_ledgers, vendors }) {
                 title="Transaksi Pembelian Kredit"
                 action="/pembelian-kredit"
                 buttonType="Tambah"
-                akunOptions={akunOptions}
+                akunOptions={account_options}
                 subLedgers={subLedgers}
                 vendors={vendorNames}
                 show={popup}

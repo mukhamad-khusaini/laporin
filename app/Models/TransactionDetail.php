@@ -34,7 +34,7 @@ class TransactionDetail extends Model
 
             return [
                 'id'=> $detail->transactionHeader->id,
-                'transaction_date' => $detail->transactionHeader->transaction_date->format('Y-m-d'),
+                'transaction_date' => $detail->transactionHeader->transaction_date->format('Y-m-d\TH:i'),
                 'sub_ledger' => $detail->subLedger->name ?? '-',
                 'total' => floatval($detail->debit),
                 'vendor' => $vendorDetail?->subLedger?->name ?? '-',

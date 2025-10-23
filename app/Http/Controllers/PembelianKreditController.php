@@ -21,6 +21,27 @@ class PembelianKreditController extends Controller
     public function index()
     {
         $data = TransactionDetail::getPembelianKredit();
+
+        // Ambil tipe perusahaan (bisa dari user, config, atau model)
+        $companyType = Auth::user()->company->company_type ?? 'jasa'; // default jasa
+
+        // Tentukan akun default
+        $defaultAccounts = match ($companyType) {
+            'manufaktur' => ['Peralatan', 'Perlengkapan', 'Bahan Baku'],
+            'dagang'     => ['Peralatan', 'Perlengkapan', 'Persediaan Barang'],
+            default      => ['Peralatan', 'Perlengkapan'],
+        };
+
+        // Ambil akun dari transaksi
+        $transaksiAccounts = collect($data)->pluck('account_type')->filter()->unique()->values();
+
+        // Gabungkan dan hilangkan duplikat
+        $akunOptions = collect($defaultAccounts)
+            ->merge($transaksiAccounts)
+            ->unique()
+            ->values();
+
+
         // Ambil akun barang
         $barangAccounts = Account::whereIn('name', [
             'Peralatan', 'Perlengkapan', 'Bahan Baku', 'Persediaan'
@@ -47,6 +68,7 @@ class PembelianKreditController extends Controller
             'data' => $data,
             'sub_ledgers' => $subLedgers,
             'vendors' => $vendors,
+            'account_options' => $akunOptions,
         ]);
     }
 

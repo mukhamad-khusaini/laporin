@@ -284,6 +284,13 @@ function BarangPopup({ onClose, onAdd, akunOptions }) {
     const [namaBarang, setNamaBarang] = useState("");
     const [akun, setAkun] = useState("");
 
+    const toTitleCase = (str) =>
+        str
+            .toLowerCase()
+            .split(" ")
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(" ");
+
     const handleAdd = () => {
         if (!namaBarang.trim()) {
             alert("Nama barang wajib diisi.");
@@ -309,7 +316,7 @@ function BarangPopup({ onClose, onAdd, akunOptions }) {
                     type="text"
                     placeholder="Nama barang"
                     value={namaBarang}
-                    onChange={(e) => setNamaBarang(e.target.value)}
+                    onChange={(e) => setNamaBarang(toTitleCase(e.target.value))}
                     className="border rounded px-3 py-1 w-full"
                 />
                 <select
@@ -339,6 +346,13 @@ function BarangPopup({ onClose, onAdd, akunOptions }) {
 function VendorPopup({ onClose, onAdd }) {
     const [namaVendor, setNamaVendor] = useState("");
 
+    const toTitleCase = (str) =>
+        str
+            .toLowerCase()
+            .split(" ")
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(" ");
+
     const handleAdd = () => {
         if (!namaVendor.trim()) {
             alert("Nama vendor wajib diisi.");
@@ -360,7 +374,7 @@ function VendorPopup({ onClose, onAdd }) {
                     type="text"
                     placeholder="Nama vendor"
                     value={namaVendor}
-                    onChange={(e) => setNamaVendor(e.target.value)}
+                    onChange={(e) => setNamaVendor(toTitleCase(e.target.value))}
                     className="border rounded px-3 py-1 w-full"
                 />
                 <button

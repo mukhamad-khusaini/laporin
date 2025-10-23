@@ -19,6 +19,19 @@ export default function PembelianKreditTable({
     const [editData, setEditData] = useState(null);
     const [deleteData, setDeleteData] = useState(null);
 
+    // format tanggal
+    const formatTanggal = (isoString) => {
+        if (!isoString) return "";
+        const date = new Date(isoString);
+        return date.toLocaleDateString("id-ID", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+        });
+    };
+
     // Form untuk delete
     const { delete: destroy } = useForm();
 
@@ -140,7 +153,7 @@ export default function PembelianKreditTable({
                                 >
                                     <td className="px-4 py-2">{idx + 1}</td>
                                     <td className="px-4 py-2">
-                                        {row.transaction_date}
+                                        {formatTanggal(row.transaction_date)}
                                     </td>
                                     <td className="px-4 py-2">
                                         {row.account_type}
