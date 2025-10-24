@@ -33,6 +33,7 @@ export default function PembelianKredit({
                     setSubLedgers={(data) => setSubLedgers(data)}
                     vendors={vendorNames}
                     setVendors={(data) => setVendorNames(data)}
+                    transaction_type="kredit"
                     data={data}
                     onAddTransaksi={() => popupHendler(true)}
                 />
@@ -53,6 +54,7 @@ export default function PembelianKredit({
                 onAddVendor={(newVendor) =>
                     setVendorNames([...vendorNames, newVendor])
                 }
+                transaction_type="kredit"
             />
         </AuthenticatedLayout>
     );

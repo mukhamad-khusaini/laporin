@@ -8,15 +8,19 @@ export default function TransaksiPopup({
     akunOptions,
     subLedgers = [],
     vendors = [],
+    source = [],
     show,
     initialData,
     onClose,
     onAddSubLedger,
-    onAddVendor,
+    onAddVendor = () => {},
+    onAddSource = () => {},
+    transaction_type,
     isEdit = false,
 }) {
     const [showBarangPopup, setShowBarangPopup] = useState(false);
     const [showVendorPopup, setShowVendorPopup] = useState(false);
+    const [showSourcePopup, setShowSourcePopup] = useState(false);
 
     const { data, setData, post, put, processing } = useForm({
         id: "",
@@ -24,8 +28,9 @@ export default function TransaksiPopup({
         sub_ledger: "",
         amount: "",
         vendor: "",
+        source: "",
         transaction_date: new Date().toISOString().slice(0, 16),
-        description: "Pembelian kredit",
+        description: "",
     });
 
     useEffect(() => {
@@ -36,8 +41,9 @@ export default function TransaksiPopup({
                 sub_ledger: initialData.sub_ledger ?? "",
                 amount: initialData.total ?? "",
                 vendor: initialData.vendor ?? "",
+                source: initialData.source ?? "",
                 transaction_date: initialData.transaction_date ?? "",
-                description: initialData.description ?? "Pembelian kredit",
+                description: initialData.description ?? "",
             });
         }
     }, [initialData]);
@@ -84,8 +90,9 @@ export default function TransaksiPopup({
                         sub_ledger: "",
                         amount: "",
                         vendor: "",
+                        source: "",
                         transaction_date: new Date().toISOString().slice(0, 16),
-                        description: "Pembelian kredit",
+                        description: "",
                     });
                 },
             });
@@ -183,8 +190,8 @@ export default function TransaksiPopup({
                         />
                     </div>
 
-                    {/* Vendor (opsional) */}
-                    {vendors.length > 0 && (
+                    {/* Vendor/Sumber (opsional) */}
+                    {transaction_type == "kredit" ? (
                         <div className="space-y-1">
                             <label className="text-sm text-gray-700">
                                 Vendor <span className="text-red-500">*</span>
@@ -209,6 +216,34 @@ export default function TransaksiPopup({
                                     className="min-w-fit bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700"
                                 >
                                     + Vendor
+                                </button>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="space-y-1">
+                            <label className="text-sm text-gray-700">
+                                Sumber <span className="text-red-500">*</span>
+                            </label>
+                            <div className="flex items-center space-x-2">
+                                <select
+                                    value={data.source}
+                                    onChange={(e) =>
+                                        setData("source", e.target.value)
+                                    }
+                                    className="border rounded px-3 py-1 w-full"
+                                >
+                                    <option value="">Pilih sumber</option>
+                                    {source.map((v) => (
+                                        <option key={v} value={v}>
+                                            {v}
+                                        </option>
+                                    ))}
+                                </select>
+                                <button
+                                    onClick={() => setShowSourcePopup(true)}
+                                    className="min-w-fit bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700"
+                                >
+                                    + Sumber
                                 </button>
                             </div>
                         </div>
@@ -273,6 +308,14 @@ export default function TransaksiPopup({
                 <VendorPopup
                     onClose={() => setShowVendorPopup(false)}
                     onAdd={onAddVendor}
+                />
+            )}
+
+            {/* Pop-up Tambah Sumber */}
+            {showSourcePopup && (
+                <SourcePopup
+                    onClose={() => setShowSourcePopup(false)}
+                    onAdd={onAddSource}
                 />
             )}
         </div>
@@ -382,6 +425,52 @@ function VendorPopup({ onClose, onAdd }) {
                     className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
                 >
                     Tambah Vendor
+                </button>
+            </div>
+        </>
+    );
+}
+
+// Subkomponen Tambah Sumber
+function SourcePopup({ onClose, onAdd }) {
+    const [namaSumber, setNamaSumber] = useState("");
+
+    const toTitleCase = (str) =>
+        str
+            .toLowerCase()
+            .split(" ")
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(" ");
+
+    const handleAdd = () => {
+        if (!namaSumber.trim()) {
+            alert("Nama sumber wajib diisi.");
+            return;
+        }
+        onAdd(namaSumber.trim());
+        onClose();
+    };
+
+    return (
+        <>
+            <div
+                className="fixed inset-0 bg-black bg-opacity-50 z-40"
+                onClick={onClose}
+            />
+            <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-[10px] shadow-2xl z-50 w-[400px] max-w-full p-4 space-y-4">
+                <h3 className="text-lg font-semibold">Tambah Sumber</h3>
+                <input
+                    type="text"
+                    placeholder="Nama sumber"
+                    value={namaSumber}
+                    onChange={(e) => setNamaSumber(toTitleCase(e.target.value))}
+                    className="border rounded px-3 py-1 w-full"
+                />
+                <button
+                    onClick={handleAdd}
+                    className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+                >
+                    Tambah Sumber
                 </button>
             </div>
         </>

@@ -39,6 +39,38 @@ class TransactionDetail extends Model
                 'total' => floatval($detail->debit),
                 'vendor' => $vendorDetail?->subLedger?->name ?? '-',
                 'account_type' => $detail->account->name ?? '-',
+                'description' => $detail->transactionHeader->description ?? "",
+            ];
+        });
+    }
+
+    public static function getPembelianTunai()
+    {
+        return Self::with([
+            'account',
+            'subLedger',
+            'transactionHeader.details.subLedger', // preload semua detail untuk akses vendor
+        ])
+        ->whereHas('transactionHeader', function ($q) {
+            $q->where('transaction_category', 'pembelian.tunai');
+        })
+        ->where('debit', '>', 0) // hanya ambil akun pembelian
+        ->orderByDesc('transaction_header_id')
+        ->get()
+        ->map(function ($detail) {
+            // Cari detail lain dalam transaksi yang sama yang posisinya kredit
+            $sourceDetail = $detail->transactionHeader->details
+                ->where('credit', '>', 0)
+                ->first();
+
+            return [
+                'id'=> $detail->transactionHeader->id,
+                'transaction_date' => $detail->transactionHeader->transaction_date->format('Y-m-d\TH:i'),
+                'sub_ledger' => $detail->subLedger->name ?? '-',
+                'total' => floatval($detail->debit),
+                'source' => $sourceDetail?->subLedger?->name ?? '-',
+                'account_type' => $detail->account->name ?? '-',
+                'description' => $detail->transactionHeader->description ?? "",
             ];
         });
     }

@@ -2,16 +2,19 @@ import { useState, useEffect, useMemo } from "react";
 import TransaksiPopup from "./TransaksiPopup";
 import { useForm } from "@inertiajs/react";
 
-export default function PembelianKreditTable({
+export default function TransactionTable({
     data: rawInput,
     akunOptions = [],
     subLedgers = [],
     setSubLedgers,
     vendors = [],
+    source = [],
     setVendors,
+    setSources,
     actionEdit,
+    transaction_type,
     actionDelete,
-    onAddTransaksi = () => console.log("tambah"),
+    onAddTransaksi = () => {},
 }) {
     const [data, setData] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
@@ -121,10 +124,15 @@ export default function PembelianKreditTable({
                             <th className="px-4 py-2 w-32">Tanggal</th>
                             <th className="px-4 py-2">Nama Akun</th>
                             <th className="px-4 py-2">Barang</th>
+                            <th className="px-4 py-2">Keterangan</th>
                             <th className="px-4 py-2 text-right">
                                 Total Pembelian
                             </th>
-                            <th className="px-4 py-2">Vendor</th>
+                            <th className="px-4 py-2">
+                                {transaction_type == "kredit"
+                                    ? "Vendor"
+                                    : "Sumber"}
+                            </th>
                             <th className="px-4 py-2 text-center">Aksi</th>
                         </tr>
                     </thead>
@@ -161,11 +169,16 @@ export default function PembelianKreditTable({
                                     <td className="px-4 py-2">
                                         {row.sub_ledger ?? "-"}
                                     </td>
+                                    <td className="px-4 py-2">
+                                        {row.description}
+                                    </td>
                                     <td className="px-4 py-2 text-right">
                                         {row.total.toLocaleString()}
                                     </td>
                                     <td className="px-4 py-2">
-                                        {row.vendor ?? "-"}
+                                        {transaction_type == "kredit"
+                                            ? row.vendor ?? "-"
+                                            : row.source ?? "-"}
                                     </td>
                                     <td className="px-4 py-2 text-center space-x-2">
                                         <button
@@ -198,6 +211,7 @@ export default function PembelianKreditTable({
                     akunOptions={akunOptions}
                     subLedgers={subLedgers}
                     vendors={vendors}
+                    source={source}
                     show={editData}
                     onClose={() => setEditData(null)}
                     onAddSubLedger={(newItem) =>
@@ -206,7 +220,11 @@ export default function PembelianKreditTable({
                     onAddVendor={(newVendor) =>
                         setVendors([...vendors, newVendor])
                     }
+                    onAddSource={(newSource) =>
+                        setSources([...source, newSource])
+                    }
                     initialData={editData}
+                    transaction_type={transaction_type}
                     isEdit={true}
                 />
             )}
@@ -226,7 +244,12 @@ export default function PembelianKreditTable({
                         <p className="text-sm text-gray-700">
                             Anda yakin ingin menghapus transaksi{" "}
                             <strong>{deleteData.sub_ledger}</strong> dari vendor{" "}
-                            <strong>{deleteData.vendor}</strong>?
+                            <strong>
+                                {transaction_type == "kredit"
+                                    ? deleteData.vendor
+                                    : deleteData.source}
+                            </strong>
+                            ?
                         </p>
                         <div className="flex justify-end space-x-2">
                             <button
