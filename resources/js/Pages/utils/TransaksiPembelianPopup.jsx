@@ -1,7 +1,7 @@
 import { useForm } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 
-export default function TransaksiPopup({
+export default function TransaksiPembelianPopup({
     title,
     action,
     buttonType,

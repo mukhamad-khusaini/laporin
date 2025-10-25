@@ -1,7 +1,7 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import TransactionTable from "../utils/TransactionTable";
+import TabelTransaksiPembelian from "../utils/TabelTransaksiPembelian";
 import { useState } from "react";
-import TransaksiPopup from "../utils/TransaksiPopup";
+import TransaksiPembelianPopup from "../utils/TransaksiPembelianPopup";
 import FlashMessage from "../utils/FlashMessage";
 
 export default function PembelianTunai({
@@ -25,7 +25,7 @@ export default function PembelianTunai({
                 Pembelian Tunai
             </h2>
             <div className="px-6 py-3">
-                <TransactionTable
+                <TabelTransaksiPembelian
                     akunOptions={account_options}
                     actionEdit={"pembelian-tunai.update"}
                     actionDelete={"pembelian-tunai.destroy"}
@@ -39,7 +39,7 @@ export default function PembelianTunai({
                 />
             </div>
 
-            <TransaksiPopup
+            <TransaksiPembelianPopup
                 title="Transaksi Pembelian Tunai"
                 action="/pembelian-tunai"
                 buttonType="Tambah"

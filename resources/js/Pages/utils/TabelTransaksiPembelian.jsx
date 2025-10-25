@@ -1,8 +1,8 @@
 import { useState, useEffect, useMemo } from "react";
-import TransaksiPopup from "./TransaksiPopup";
+import TransaksiPembelianPopup from "./TransaksiPembelianPopup";
 import { useForm } from "@inertiajs/react";
 
-export default function TransactionTable({
+export default function TabelTransaksiPembelian({
     data: rawInput,
     akunOptions = [],
     subLedgers = [],
@@ -204,7 +204,7 @@ export default function TransactionTable({
             </div>
 
             {editData && (
-                <TransaksiPopup
+                <TransaksiPembelianPopup
                     title="Edit Transaksi"
                     action={actionEdit}
                     buttonType="Edit"
