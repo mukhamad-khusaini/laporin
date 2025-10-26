@@ -75,7 +75,30 @@ class TransactionDetail extends Model
         });
     }
 
+    public static function getPenjualanKredit()
+    {   
+        // Ambil semua detail yang terkait dengan transaksi penjualan kredit
+        $headers = TransactionHeader::with(['details.account', 'details.subLedger'])
+            ->where('transaction_category', 'penjualan.kredit')
+            ->get();
 
+        return $headers->map(function ($header) {
+            // Ambil detail yang posisi kredit → barang/jasa yang dijual
+            $kredit = $header->details->firstWhere('credit', '>', 0);
+            // Ambil detail yang posisi debit → piutang
+            $debit = $header->details->firstWhere('debit', '>', 0);
+
+            return [
+                'transaction_date' => $header->transaction_date,
+                'account_type'     => $kredit?->account->name ?? '-',
+                'sub_ledger'       => $kredit?->subLedger->name ?? '-',
+                'description'      => $header->description ?? '-',
+                'amount'           => $kredit?->credit ?? 0,
+                'piutang'          => $debit?->subLedger->name ?? '-',
+            ];
+        });
+
+    }
 
     public function transactionHeader(): BelongsTo
     {

@@ -7,6 +7,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\PembelianKreditController;
 use App\Http\Controllers\PembelianTunaiController;
+use App\Http\Controllers\PenjualanKreditController;
 use App\Http\Controllers\TransactionController;
 use Inertia\Inertia;
 
@@ -37,7 +38,7 @@ Route::middleware(['auth'])->group(function(){
 
     // Penjualan
     Route::get('/penjualan-tunai', [ContentController::class,'penjualanTunaiShow'])->name('penjualan.tunai');
-    Route::get('/penjualan-kredit', [ContentController::class,'penjualanKreditShow'])->name('penjualan.kredit');
+    Route::resource('penjualan-kredit', PenjualanKreditController::class);
 
     // Produksi
     Route::get('/produksi', [ContentController::class,'produksiShow'])->name('produksi');
