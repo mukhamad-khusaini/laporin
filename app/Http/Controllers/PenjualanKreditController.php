@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Account;
+use App\Models\SubLedger;
 use App\Models\TransactionDetail;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -15,7 +17,25 @@ class PenjualanKreditController extends Controller
     {
         $data = TransactionDetail::getPenjualanKredit();
 
-        return Inertia::render('content/PenjualanKredit', ['data'=>$data]);
+         // Ambil akun-akun penjualan: Peralatan, Perlengkapan, Produk
+        $akunPenjualan = Account::whereIn('name', ['Peralatan', 'Perlengkapan', 'Produk'])
+        ->pluck('name')
+        ->values();
+
+        // Ambil sub ledger berdasarkan akun penjualan
+        $subLedgerByAkun = [];
+
+        foreach ($akunPenjualan as $akun) {
+            $subLedgers = SubLedger::where('account_id', Account::where('name', $akun)->pluck('id')->values())
+                ->pluck('name')
+                ->unique()
+                ->values();
+    
+            $subLedgerByAkun[$akun] = $subLedgers;
+        }
+    
+
+        return Inertia::render('content/PenjualanKredit', ['data'=>$data, 'account_options'=>$akunPenjualan, 'sub_ledgers'=> collect($subLedgerByAkun)->flatten(1)->values()->all()]);
     }
 
     /**

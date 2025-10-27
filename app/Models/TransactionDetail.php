@@ -94,7 +94,7 @@ class TransactionDetail extends Model
                 'sub_ledger'       => $kredit?->subLedger->name ?? '-',
                 'description'      => $header->description ?? '-',
                 'amount'           => $kredit?->credit ?? 0,
-                'piutang'          => $debit?->subLedger->name ?? '-',
+                'receivable'          => $debit?->subLedger->name ?? '-',
             ];
         });
 

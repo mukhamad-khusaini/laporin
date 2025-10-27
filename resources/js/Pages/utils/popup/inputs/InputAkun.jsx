@@ -8,6 +8,9 @@ const InputAkun = ({ data, setData, options }) => (
             onChange={(e) => setData("account_type", e.target.value)}
             className="border px-3 py-1 rounded w-full"
         >
+            <option className="bg-gray-300" value="">
+                Pilih akun
+            </option>
             {options.map((opt) => (
                 <option key={opt} value={opt}>
                     {opt}

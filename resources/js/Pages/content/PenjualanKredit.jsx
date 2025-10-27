@@ -4,37 +4,43 @@ import TableCore from "../utils/table/TableCore";
 import TableHead from "../utils/table/TableHead";
 import TableBody from "../utils/table/TableBody";
 import { usePage } from "@inertiajs/react";
+import { formatTanggal, formatRupiah } from "@/function";
+import PopupCore from "../utils/popup/PopupCore";
+import InputAkun from "../utils/popup/inputs/InputAkun";
+import { useForm } from "@inertiajs/react";
+import InputSubLedger from "../utils/popup/inputs/InputSubLedger";
 
 export default function PenjualanKredit() {
-    const { data } = usePage().props;
+    const { data: dataStream, account_options, sub_ledgers } = usePage().props;
     const [searchTerm, setSearchTerm] = useState("");
+    const [addPopup, setAddPopup] = useState(false);
+    const [editPopup, setEditPopup] = useState(false);
+
+    // Form Tambah transaksi
+    const {
+        data: dataTambah,
+        setData: setDataTambah,
+        post,
+        processing,
+    } = useForm({
+        account_type: "",
+        sub_ledger: "",
+        amount: "",
+        receivable: "",
+        transaction_date: new Date().toISOString().slice(0, 16),
+        description: "",
+    });
 
     const hendleSearch = (sch_tx) => {
         setSearchTerm(sch_tx);
     };
 
-    // format tanggal
-    const formatTanggal = (isoString) => {
-        if (!isoString) return "";
-        const date = new Date(isoString);
-        return date.toLocaleDateString("id-ID", {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-        });
+    const hendleAddPopup = () => {
+        setAddPopup(!addPopup);
     };
 
-    // Format rupiah
-    const formatRupiah = (angka) => {
-        if (angka == null || isNaN(angka)) return "Rp0";
-
-        return new Intl.NumberFormat("id-ID", {
-            style: "currency",
-            currency: "IDR",
-            minimumFractionDigits: 0,
-        }).format(angka);
+    const hendleEditPopup = () => {
+        setEditPopup(!editPopup);
     };
 
     const columns = [
@@ -49,7 +55,7 @@ export default function PenjualanKredit() {
     ];
 
     const filteredData = useMemo(() => {
-        return data.filter((row) => {
+        return dataStream.filter((row) => {
             const matchSearch =
                 row.sub_ledger
                     ?.toLowerCase()
@@ -60,7 +66,7 @@ export default function PenjualanKredit() {
                     .includes(searchTerm.toLowerCase());
             return matchSearch;
         });
-    }, [data, searchTerm]);
+    }, [dataStream, searchTerm]);
 
     return (
         <AuthenticatedLayout title="Penjualan Kredit">
@@ -68,7 +74,22 @@ export default function PenjualanKredit() {
                 Penjualan Kredit
             </h2>
             <div className="px-6 py-3">
-                <TableCore onSearch={hendleSearch}>
+                {/* Popup hendler */}
+                <PopupCore onClose={hendleAddPopup} isOpen={addPopup}>
+                    <InputAkun
+                        options={account_options}
+                        data={dataTambah}
+                        setData={setDataTambah}
+                    />
+                    <InputSubLedger
+                        options={sub_ledgers}
+                        data={dataTambah}
+                        setData={setDataTambah}
+                    />
+                </PopupCore>
+
+                {/* Table hendler */}
+                <TableCore onAdd={hendleAddPopup} onSearch={hendleSearch}>
                     <TableHead columns={columns} />
                     <TableBody
                         data={filteredData}
@@ -94,7 +115,22 @@ export default function PenjualanKredit() {
                                     <td className="px-4 py-2">
                                         {item.piutang}
                                     </td>
-                                    <td className="px-4 py-2">Aksi</td>
+                                    <td className="px-4 py-2">
+                                        <button
+                                            onClick={() => setEditData(row)}
+                                            className="inline-flex items-center px-3 py-1 text-sm font-medium 
+               text-white bg-blue-600 rounded hover:bg-blue-700 transition"
+                                        >
+                                            ✏️ Edit
+                                        </button>
+                                        <button
+                                            onClick={() => setDeleteData(row)}
+                                            className="inline-flex items-center px-3 py-1 text-sm font-medium 
+               text-white bg-red-600 rounded hover:bg-red-700 transition"
+                                        >
+                                            🗑️ Hapus
+                                        </button>
+                                    </td>
                                 </>
                             );
                         }}
