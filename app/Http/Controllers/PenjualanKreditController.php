@@ -33,9 +33,20 @@ class PenjualanKreditController extends Controller
     
             $subLedgerByAkun[$akun] = $subLedgers;
         }
+
+        // Ambil akun-akun piutang (bisa berdasarkan nama atau kategori)
+        $akunPiutang = Account::where('name', 'Piutang')->get();
+
+
+        // Ambil semua sub ledger dari akun-akun piutang
+        $subLedgerPiutang = SubLedger::where('account_id', $akunPiutang->pluck('id'))
+        ->pluck('name')
+        ->unique()
+        ->values();
+
     
 
-        return Inertia::render('content/PenjualanKredit', ['data'=>$data, 'account_options'=>$akunPenjualan, 'sub_ledgers'=> collect($subLedgerByAkun)->flatten(1)->values()->all()]);
+        return Inertia::render('content/PenjualanKredit', ['data'=>$data, 'account_options'=>$akunPenjualan, 'sub_ledgers'=> collect($subLedgerByAkun)->flatten(1)->values()->all(),'receivables'=>$subLedgerPiutang]);
     }
 
     /**

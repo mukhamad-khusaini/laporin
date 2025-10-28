@@ -1,19 +1,20 @@
 import React from "react";
 
-const InputAkun = ({ data, setData, options }) => (
-    <div>
-        <label className="text-sm">Akun</label>
+const InputAkun = ({ value, hendleSetvalue, options }) => (
+    <div className="space-y-1">
+        <label className="text-sm text-gray-700">
+            Nama Akun <span className="text-red-500">*</span>
+        </label>
         <select
-            value={data.account_type}
-            onChange={(e) => setData("account_type", e.target.value)}
-            className="border px-3 py-1 rounded w-full"
+            value={value}
+            onChange={(e) => hendleSetvalue(e.target.value)}
+            className="border rounded px-3 py-1 w-full"
+            required
         >
-            <option className="bg-gray-300" value="">
-                Pilih akun
-            </option>
-            {options.map((opt) => (
-                <option key={opt} value={opt}>
-                    {opt}
+            <option value="">Pilih akun</option>
+            {options.map((akun) => (
+                <option key={akun} value={akun}>
+                    {akun}
                 </option>
             ))}
         </select>

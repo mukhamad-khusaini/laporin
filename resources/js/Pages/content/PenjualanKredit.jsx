@@ -11,10 +11,31 @@ import { useForm } from "@inertiajs/react";
 import InputSubLedger from "../utils/popup/inputs/InputSubLedger";
 
 export default function PenjualanKredit() {
-    const { data: dataStream, account_options, sub_ledgers } = usePage().props;
+    const {
+        data: dataStream,
+        account_options,
+        sub_ledgers,
+        receivables,
+    } = usePage().props;
     const [searchTerm, setSearchTerm] = useState("");
     const [addPopup, setAddPopup] = useState(false);
     const [editPopup, setEditPopup] = useState(false);
+
+    // Sub ledgers options
+    //
+    //
+    //
+    //
+    const [sub_ledger_options, set_sub_ledger_options] = useState(sub_ledgers);
+
+    const [receivable_sub_ledger_options, set_receivable_sub_ledger_options] =
+        useState(receivables);
+    const hendleAddReceivableSubLedger = (e) => {
+        set_receivable_sub_ledger_options([
+            ...receivable_sub_ledger_options,
+            e.name,
+        ]);
+    };
 
     // Form Tambah transaksi
     const {
@@ -31,6 +52,28 @@ export default function PenjualanKredit() {
         description: "",
     });
 
+    //
+    //
+    // Hendle form add
+    //
+    //
+    const hendleSetValue_accountType = (e) => {
+        setDataTambah("account_type", e);
+    };
+
+    const hendleSetValue_subLedger = (e) => {
+        setDataTambah("sub_ledger", e);
+    };
+
+    const hendleSetValue_receivable = (e) => {
+        setDataTambah("receivable", e);
+    };
+
+    //
+    //
+    // Hendler table
+    //
+    //
     const hendleSearch = (sch_tx) => {
         setSearchTerm(sch_tx);
     };
@@ -78,13 +121,21 @@ export default function PenjualanKredit() {
                 <PopupCore onClose={hendleAddPopup} isOpen={addPopup}>
                     <InputAkun
                         options={account_options}
-                        data={dataTambah}
-                        setData={setDataTambah}
+                        value={dataTambah.account_type}
+                        hendleSetvalue={hendleSetValue_accountType}
                     />
                     <InputSubLedger
-                        options={sub_ledgers}
-                        data={dataTambah}
-                        setData={setDataTambah}
+                        options={sub_ledger_options}
+                        value={dataTambah.sub_ledger}
+                        hendleSetValue={hendleSetValue_subLedger}
+                        name="Sub"
+                    />
+                    <InputSubLedger
+                        options={receivable_sub_ledger_options}
+                        value={dataTambah.receivable}
+                        hendleSetValue={hendleSetValue_receivable}
+                        onAdd={hendleAddReceivableSubLedger}
+                        name="Piutang"
                     />
                 </PopupCore>
 

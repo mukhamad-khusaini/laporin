@@ -29,14 +29,6 @@ const PopupCore = ({ isOpen, onClose, onSubmit, children }) => {
                 ref={popupRef}
                 className="bg-white p-6 rounded shadow-lg w-full max-w-xl space-y-4 relative"
             >
-                {/* Tombol X */}
-                <button
-                    onClick={onClose}
-                    className="absolute top-2 right-4 text-gray-500 hover:text-red-600 text-3xl font-bold"
-                >
-                    &times;
-                </button>
-
                 <h2 className="text-lg font-semibold">Tambah Transaksi</h2>
                 {children}
                 <div className="flex justify-end space-x-2">
