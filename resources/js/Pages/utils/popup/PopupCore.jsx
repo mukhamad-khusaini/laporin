@@ -1,7 +1,7 @@
 import React from "react";
 import { useRef, useEffect } from "react";
 
-const PopupCore = ({ isOpen, onClose, onSubmit, children }) => {
+const PopupCore = ({ isOpen, onClose, onSubmit, status, children }) => {
     const popupRef = useRef();
 
     // Tutup popup jika klik di luar kotak
@@ -29,7 +29,7 @@ const PopupCore = ({ isOpen, onClose, onSubmit, children }) => {
                 ref={popupRef}
                 className="bg-white p-6 rounded shadow-lg w-full max-w-xl space-y-4 relative"
             >
-                <h2 className="text-lg font-semibold">Tambah Transaksi</h2>
+                <h2 className="text-lg font-semibold">{status} Transaksi</h2>
                 {children}
                 <div className="flex justify-end space-x-2">
                     <button

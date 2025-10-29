@@ -1,19 +1,16 @@
 import React from "react";
 
-const formatDatetimeLocal = (value) => {
-    if (!value) return "";
-    const date = new Date(value);
-    return date.toISOString().slice(0, 16); // YYYY-MM-DDTHH:mm
-};
-
-const InputTanggal = ({ data, setData }) => (
-    <div>
-        <label className="text-sm">Tanggal & Jam</label>
+const InputTanggal = ({ value, hendleSetValue }) => (
+    <div className="space-y-1">
+        <label className="text-sm text-gray-700">
+            Tanggal & Jam Transaksi <span className="text-red-500">*</span>
+        </label>
         <input
             type="datetime-local"
-            value={formatDatetimeLocal(data.transaction_date)}
-            onChange={(e) => setData("transaction_date", e.target.value)}
-            className="border px-3 py-1 rounded w-full"
+            value={value}
+            onChange={(e) => hendleSetValue(e.target.value)}
+            className="border rounded px-3 py-1 w-full"
+            required
         />
     </div>
 );

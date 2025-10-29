@@ -1,13 +1,17 @@
 import React from "react";
 
-const InputJumlah = ({ data, setData }) => (
-    <div>
-        <label className="text-sm">Jumlah</label>
+const InputJumlah = ({ value, hendleSetValue, name }) => (
+    <div className="space-y-1">
+        <label className="text-sm text-gray-700">
+            Jumlah {name} <span className="text-red-500">*</span>
+        </label>
         <input
             type="number"
-            value={data.amount}
-            onChange={(e) => setData("amount", e.target.value)}
-            className="border px-3 py-1 rounded w-full"
+            value={value}
+            onChange={(e) => hendleSetValue(e.target.value)}
+            placeholder="Masukkan jumlah"
+            className="border rounded px-3 py-1 w-full"
+            required
         />
     </div>
 );

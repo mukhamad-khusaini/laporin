@@ -89,7 +89,8 @@ class TransactionDetail extends Model
             $debit = $header->details->firstWhere('debit', '>', 0);
 
             return [
-                'transaction_date' => $header->transaction_date,
+                'id' => $header->id,
+                'transaction_date' => $header->transaction_date->format('Y-m-d\TH:i'),
                 'account_type'     => $kredit?->account->name ?? '-',
                 'sub_ledger'       => $kredit?->subLedger->name ?? '-',
                 'description'      => $header->description ?? '-',
