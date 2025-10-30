@@ -121,6 +121,8 @@ export default function PenjualanKredit() {
             alert("Waktu transaksi wajib diisi.");
             return;
         }
+
+        tambahPost(route("penjualan-kredit.store"));
     };
 
     // Form Edit transaksi
@@ -316,6 +318,7 @@ export default function PenjualanKredit() {
                     isOpen={addPopup}
                     onSubmit={hendleAddSubmit}
                     status="Tambah"
+                    isProcessing={tambahProcessing}
                 >
                     <InputAkun
                         options={account_options}

@@ -1,7 +1,14 @@
 import React from "react";
 import { useRef, useEffect } from "react";
 
-const PopupCore = ({ isOpen, onClose, onSubmit, status, children }) => {
+const PopupCore = ({
+    isOpen,
+    onClose,
+    onSubmit,
+    status,
+    children,
+    isProcessing,
+}) => {
     const popupRef = useRef();
 
     // Tutup popup jika klik di luar kotak
@@ -41,8 +48,9 @@ const PopupCore = ({ isOpen, onClose, onSubmit, status, children }) => {
                     <button
                         onClick={onSubmit}
                         className="px-4 py-2 bg-blue-600 text-white rounded"
+                        disabled={isProcessing}
                     >
-                        Simpan
+                        {isProcessing ? "Menyimpan..." : "Simpan"}
                     </button>
                 </div>
             </div>
