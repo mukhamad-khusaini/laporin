@@ -75,6 +75,8 @@ class PenjualanKreditController extends Controller
 
         DB::beginTransaction();
 
+        // KODE INI MASIH COPAS, PERLU ADA CHECK AND BALANCE
+
         try {
             $hargaJual = $request->amount;
             $akunPenjualan = Account::where('name', $request->account_type)->firstOrFail();
