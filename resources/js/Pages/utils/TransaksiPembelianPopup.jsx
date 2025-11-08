@@ -27,10 +27,11 @@ export default function TransaksiPembelianPopup({
         account: "",
         sub_ledger: "",
         amount: "",
+        quantity: "",
         vendor: "",
         source: "",
         transaction_date: new Date().toISOString().slice(0, 16),
-        description: "",
+        description: "-",
     });
 
     useEffect(() => {
@@ -40,10 +41,11 @@ export default function TransaksiPembelianPopup({
                 account: initialData.account_type ?? "",
                 sub_ledger: initialData.sub_ledger ?? "",
                 amount: initialData.total ?? "",
+                quantity: initialData.quantity ?? "",
                 vendor: initialData.vendor ?? "",
                 source: initialData.source ?? "",
                 transaction_date: initialData.transaction_date ?? "",
-                description: initialData.description ?? "",
+                description: initialData.description ?? "-",
             });
         }
     }, [initialData]);
@@ -63,6 +65,11 @@ export default function TransaksiPembelianPopup({
 
         if (vendors.length > 0 && !data.vendor) {
             alert("Vendor wajib dipilih.");
+            return;
+        }
+
+        if (!data.quantity) {
+            alert("Jumlah barang wajib diisi.");
             return;
         }
 
@@ -89,10 +96,11 @@ export default function TransaksiPembelianPopup({
                         account: "",
                         sub_ledger: "",
                         amount: "",
+                        quantity: "",
                         vendor: "",
                         source: "",
                         transaction_date: new Date().toISOString().slice(0, 16),
-                        description: "",
+                        description: "-",
                     });
                 },
             });
@@ -121,7 +129,7 @@ export default function TransaksiPembelianPopup({
                 </div>
 
                 {/* Body */}
-                <div className="p-4 space-y-4">
+                <div className="p-4 space-y-4 max-h-[90vh] overflow-y-auto">
                     {/* Akun */}
                     <div className="space-y-1">
                         <label className="text-sm text-gray-700">
@@ -142,42 +150,57 @@ export default function TransaksiPembelianPopup({
                         </select>
                     </div>
 
-                    {/* Subledger (opsional) */}
-                    {subLedgers.length > 0 && (
-                        <div className="space-y-1">
-                            <label className="text-sm text-gray-700">
-                                Jenis Barang{" "}
-                                <span className="text-red-500">*</span>
-                            </label>
-                            <div className="flex items-center space-x-2">
-                                <select
-                                    value={data.sub_ledger}
-                                    onChange={(e) =>
-                                        setData("sub_ledger", e.target.value)
-                                    }
-                                    className="border rounded px-3 py-1 w-full"
-                                >
-                                    <option value="">Pilih jenis barang</option>
-                                    {subLedgers.map((s) => (
-                                        <option key={s} value={s}>
-                                            {s}
-                                        </option>
-                                    ))}
-                                </select>
-                                <button
-                                    onClick={() => setShowBarangPopup(true)}
-                                    className="min-w-fit bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700"
-                                >
-                                    + Barang
-                                </button>
-                            </div>
+                    {/* Subledger */}
+
+                    <div className="space-y-1">
+                        <label className="text-sm text-gray-700">
+                            Jenis Barang <span className="text-red-500">*</span>
+                        </label>
+                        <div className="flex items-center space-x-2">
+                            <select
+                                value={data.sub_ledger}
+                                onChange={(e) =>
+                                    setData("sub_ledger", e.target.value)
+                                }
+                                className="border rounded px-3 py-1 w-full"
+                            >
+                                <option value="">Pilih jenis barang</option>
+                                {subLedgers.map((s) => (
+                                    <option key={s} value={s}>
+                                        {s}
+                                    </option>
+                                ))}
+                            </select>
+                            <button
+                                onClick={() => setShowBarangPopup(true)}
+                                className="min-w-fit bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700"
+                            >
+                                + Barang
+                            </button>
                         </div>
-                    )}
+                    </div>
 
                     {/* Jumlah */}
                     <div className="space-y-1">
                         <label className="text-sm text-gray-700">
-                            Jumlah Pembelian{" "}
+                            Jumlah (Unit)
+                        </label>
+                        <input
+                            type="number"
+                            min="1"
+                            value={data.quantity}
+                            onChange={(e) =>
+                                setData("quantity", e.target.value)
+                            }
+                            className="border rounded px-3 py-1 w-full"
+                            required
+                        />
+                    </div>
+
+                    {/* Harga */}
+                    <div className="space-y-1">
+                        <label className="text-sm text-gray-700">
+                            Harga Per Unit
                             <span className="text-red-500">*</span>
                         </label>
                         <input

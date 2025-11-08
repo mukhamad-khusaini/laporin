@@ -125,6 +125,7 @@ export default function TabelTransaksiPembelian({
                             <th className="px-4 py-2">Nama Akun</th>
                             <th className="px-4 py-2">Barang</th>
                             <th className="px-4 py-2">Keterangan</th>
+                            <th className="px-4 py-2">Qty</th>
                             <th className="px-4 py-2 text-right">
                                 Total Pembelian
                             </th>
@@ -171,6 +172,9 @@ export default function TabelTransaksiPembelian({
                                     </td>
                                     <td className="px-4 py-2">
                                         {row.description}
+                                    </td>
+                                    <td className="px-4 py-2">
+                                        {row.quantity}
                                     </td>
                                     <td className="px-4 py-2 text-right">
                                         {row.total.toLocaleString()}

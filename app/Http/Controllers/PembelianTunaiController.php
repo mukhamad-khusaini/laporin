@@ -89,6 +89,7 @@ class PembelianTunaiController extends Controller
             'account' => 'required|string',
             'sub_ledger' => 'required|string',
             'amount' => 'required|numeric',
+            'quantity' => 'required|numeric',
             'source' => 'required|string',
             'description' => 'string',
             'transaction_date' => 'required|date_format:Y-m-d\TH:i',
@@ -131,6 +132,8 @@ class PembelianTunaiController extends Controller
                 'account_id' => $debitAccount->id,
                 'sub_ledger_id' => $barang->id,
                 'debit' => $validated['amount'],
+                'quantity' => $validated['quantity'],
+
             ]);
 
             // Simpan detail kredit
@@ -158,6 +161,7 @@ class PembelianTunaiController extends Controller
             'account' => 'nullable|string',
             'sub_ledger' => 'nullable|string',
             'amount' => 'nullable|numeric',
+            'quantity' => 'required|numeric',
             'source' => 'nullable|string',
             'transaction_date' => 'nullable|date_format:Y-m-d\TH:i',
             'description' => 'nullable|string',
@@ -198,6 +202,9 @@ class PembelianTunaiController extends Controller
             if (!empty($validated['amount'])) {
                 $debitDetail->debit = $validated['amount'];
                 $debitDetail->credit = 0;
+            }
+            if (!empty($validated['quantity'])) {
+                $debitDetail->quantity = $validated['quantity'];
             }
             $debitDetail->save();
     

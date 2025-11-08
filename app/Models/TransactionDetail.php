@@ -11,7 +11,7 @@ class TransactionDetail extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['transaction_header_id', 'account_id', 'debit', 'credit', 'sub_ledger_id'];
+    protected $fillable = ['transaction_header_id', 'account_id', 'debit', 'credit', 'quantity','sub_ledger_id'];
 
     public static function getPembelianKredit()
     {
@@ -36,7 +36,8 @@ class TransactionDetail extends Model
                 'id'=> $detail->transactionHeader->id,
                 'transaction_date' => $detail->transactionHeader->transaction_date->format('Y-m-d\TH:i'),
                 'sub_ledger' => $detail->subLedger->name ?? '-',
-                'total' => floatval($detail->debit),
+                'total' => floatval($detail->debit)*$detail->quantity,
+                'quantity' => $detail->quantity,
                 'vendor' => $vendorDetail?->subLedger?->name ?? '-',
                 'account_type' => $detail->account->name ?? '-',
                 'description' => $detail->transactionHeader->description ?? "",

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('account_id')->constrained()->onDelete('cascade');
             $table->decimal('debit', 15, 2)->default(0);
             $table->decimal('credit', 15, 2)->default(0);
+            $table->integer('quantity')->default(1);
             $table->foreignId('sub_ledger_id')->nullable()->constrained('sub_ledgers')->onDelete('set null');
             $table->timestamps();
         });

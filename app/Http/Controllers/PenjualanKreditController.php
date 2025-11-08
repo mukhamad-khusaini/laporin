@@ -19,36 +19,34 @@ class PenjualanKreditController extends Controller
     {
         $data = TransactionDetail::getPenjualanKredit();
 
-         // Ambil akun-akun penjualan: Peralatan, Perlengkapan, Produk
-        $akunPenjualan = Account::whereIn('name', ['Peralatan', 'Perlengkapan', 'Produk'])
-        ->pluck('name')
-        ->values();
+        // Akun default yang pasti ada
+        $akunPenjualan = Account::whereIn('name', ['Peralatan', 'Perlengkapan', 'Produk'])->get();
+        $akunPiutang = Account::where('name', 'Piutang')->first();
 
-        // Ambil sub ledger berdasarkan akun penjualan
+        // Sub ledger per akun penjualan
         $subLedgerByAkun = [];
 
         foreach ($akunPenjualan as $akun) {
-            $subLedgers = SubLedger::where('account_id', Account::where('name', $akun)->pluck('id')->values())
+            $subLedgers = SubLedger::where('account_id', $akun->id)
                 ->pluck('name')
                 ->unique()
                 ->values();
-    
-            $subLedgerByAkun[$akun] = $subLedgers;
+
+            $subLedgerByAkun[$akun->name] = $subLedgers;
         }
 
-        // Ambil akun-akun piutang (bisa berdasarkan nama atau kategori)
-        $akunPiutang = Account::where('name', 'Piutang')->get();
+        // Sub ledger piutang
+        $subLedgerPiutang = $akunPiutang
+            ? SubLedger::where('account_id', $akunPiutang->id)->pluck('name')->unique()->values()
+            : collect();
 
+        return Inertia::render('content/PenjualanKredit', [
+            'data' => $data,
+            'account_options' => $akunPenjualan->pluck('name'),
+            'sub_ledgers' => collect($subLedgerByAkun)->flatten(1)->values()->all(),
+            'receivables' => $subLedgerPiutang,
+        ]);
 
-        // Ambil semua sub ledger dari akun-akun piutang
-        $subLedgerPiutang = SubLedger::where('account_id', $akunPiutang->pluck('id'))
-        ->pluck('name')
-        ->unique()
-        ->values();
-
-    
-
-        return Inertia::render('content/PenjualanKredit', ['data'=>$data, 'account_options'=>$akunPenjualan, 'sub_ledgers'=> collect($subLedgerByAkun)->flatten(1)->values()->all(),'receivables'=>$subLedgerPiutang]);
     }
 
     /**
@@ -92,38 +90,40 @@ class PenjualanKreditController extends Controller
             ]);
 
             // Logika pencatatan
+            // Logika produk
             if ($request->account_type === 'Produk') {
-                $hpp = $subLedgerPenjualan->nilai_buku ?? 0;
+                // $hpp = $subLedgerPenjualan->nilai_buku ?? 0;
 
-                TransactionDetail::create([
-                    'transaction_header_id' => $header->id,
-                    'account_id'            => $akunPiutang->id,
-                    'sub_ledger_id'         => $subLedgerPiutang->id,
-                    'debit'                 => $hargaJual,
-                ]);
+                // TransactionDetail::create([
+                //     'transaction_header_id' => $header->id,
+                //     'account_id'            => $akunPiutang->id,
+                //     'sub_ledger_id'         => $subLedgerPiutang->id,
+                //     'debit'                 => $hargaJual,
+                // ]);
 
-                TransactionDetail::create([
-                    'transaction_header_id' => $header->id,
-                    'account_id'            => $akunPenjualan->id,
-                    'sub_ledger_id'         => $subLedgerPenjualan->id,
-                    'credit'                => $hargaJual,
-                ]);
+                // TransactionDetail::create([
+                //     'transaction_header_id' => $header->id,
+                //     'account_id'            => $akunPenjualan->id,
+                //     'sub_ledger_id'         => $subLedgerPenjualan->id,
+                //     'credit'                => $hargaJual,
+                // ]);
 
-                $akunHPP = Account::where('name', 'HPP')->firstOrFail();
-                TransactionDetail::create([
-                    'transaction_header_id' => $header->id,
-                    'account_id'            => $akunHPP->id,
-                    'debit'                 => $hpp,
-                ]);
+                // $akunHPP = Account::where('name', 'HPP')->firstOrFail();
+                // TransactionDetail::create([
+                //     'transaction_header_id' => $header->id,
+                //     'account_id'            => $akunHPP->id,
+                //     'debit'                 => $hpp,
+                // ]);
 
-                TransactionDetail::create([
-                    'transaction_header_id' => $header->id,
-                    'account_id'            => $akunPenjualan->id,
-                    'sub_ledger_id'         => $subLedgerPenjualan->id,
-                    'credit'                => $hpp,
-                ]);
+                // TransactionDetail::create([
+                //     'transaction_header_id' => $header->id,
+                //     'account_id'            => $akunPenjualan->id,
+                //     'sub_ledger_id'         => $subLedgerPenjualan->id,
+                //     'credit'                => $hpp,
+                // ]);
             }
-
+            
+            // Logika peralatan dan perlengkapan
             else if ($request->account_type === 'Peralatan' || $request->account_type === 'Perlengkapan') {
                 $nilaiBuku = $subLedgerPenjualan->nilai_buku ?? 0;
 

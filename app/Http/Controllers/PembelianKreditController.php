@@ -82,6 +82,7 @@ class PembelianKreditController extends Controller
             'account' => 'required|string',
             'sub_ledger' => 'required|string',
             'amount' => 'required|numeric',
+            'quantity' => 'required|numeric',
             'vendor' => 'required|string',
             'description' => 'string',
             'transaction_date' => 'required|date_format:Y-m-d\TH:i',
@@ -124,6 +125,7 @@ class PembelianKreditController extends Controller
                 'account_id' => $debitAccount->id,
                 'sub_ledger_id' => $barang->id,
                 'debit' => $validated['amount'],
+                'quantity' => $validated['quantity'],
             ]);
 
             // Simpan detail kredit
@@ -151,6 +153,7 @@ class PembelianKreditController extends Controller
             'account' => 'nullable|string',
             'sub_ledger' => 'nullable|string',
             'amount' => 'nullable|numeric',
+            'quantity' => 'required|numeric',
             'vendor' => 'nullable|string',
             'transaction_date' => 'nullable|date_format:Y-m-d\TH:i',
             'description' => 'nullable|string',
@@ -162,6 +165,7 @@ class PembelianKreditController extends Controller
             $header = TransactionHeader::findOrFail($id);
             $debitDetail = $header->details()->where('debit', '>', 0)->first();
             $creditDetail = $header->details()->where('credit', '>', 0)->first();
+            $totalAmount = $validated['amount']*$validated['quantity'];
     
             // Update header
             $headerUpdate = [];
@@ -191,6 +195,9 @@ class PembelianKreditController extends Controller
             if (!empty($validated['amount'])) {
                 $debitDetail->debit = $validated['amount'];
                 $debitDetail->credit = 0;
+            }
+            if (!empty($validated['quantity'])) {
+                $debitDetail->quantity = $validated['quantity'];
             }
             $debitDetail->save();
     

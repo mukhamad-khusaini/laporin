@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useForm } from "@inertiajs/react";
+import { useForm, Head } from "@inertiajs/react";
 
 export default function CreateCompany() {
     const [jenisUsaha, setJenisUsaha] = useState("");
@@ -67,6 +67,11 @@ export default function CreateCompany() {
                 code: 104,
                 type_id: 1,
             },
+            {
+                name: "Produk",
+                code: 105,
+                type_id: 1,
+            },
         ],
     };
 
@@ -88,6 +93,7 @@ export default function CreateCompany() {
 
     return (
         <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+            <Head title="Daftarkan Usaha" />
             <form
                 onSubmit={handleSubmit}
                 className="bg-white rounded-xl shadow-lg w-[90vw] max-w-3xl p-6 space-y-6"
