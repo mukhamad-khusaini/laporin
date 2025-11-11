@@ -76,22 +76,22 @@ class PenjualanKreditController extends Controller
         // KODE INI MASIH COPAS, PERLU ADA CHECK AND BALANCE
 
         try {
-            $hargaJual = $request->amount;
-            $akunPenjualan = Account::where('name', $request->account_type)->firstOrFail();
-            $subLedgerPenjualan = SubLedger::where('name', $request->sub_ledger)->where('account_id', $akunPenjualan->id)->first();
+            $hargaJual = $validated["amount"];
+            $akunPenjualan = Account::where('name', $validated["account_type"])->firstOrFail();
+            $subLedgerPenjualan = SubLedger::where('name', $validated["sub_ledger"])->where('account_id', $akunPenjualan->id)->first();
             $akunPiutang = Account::where('name', 'Piutang')->firstOrFail();
-            $subLedgerPiutang = SubLedger::where('name', $request->receivable)->where('account_id', $akunPiutang->id)->first();
+            $subLedgerPiutang = SubLedger::where('name', $validated["receivable"])->where('account_id', $akunPiutang->id)->first();
 
             // Buat header transaksi
             $header = TransactionHeader::create([
-                'transaction_date'    => $request->transaction_date,
+                'transaction_date'    => $validated["transaction_date"],
                 'transaction_category'=> 'penjualan.kredit',
-                'description'         => $request->description,
+                'description'         => $validated["description"],
             ]);
 
             // Logika pencatatan
             // Logika produk
-            if ($request->account_type === 'Produk') {
+            if ($validated["account_type"] === 'Produk') {
                 // $hpp = $subLedgerPenjualan->nilai_buku ?? 0;
 
                 // TransactionDetail::create([
@@ -123,8 +123,11 @@ class PenjualanKreditController extends Controller
                 // ]);
             }
             
+
+            // MULAI MEMBANGUN LOGIKA TAMBAH TRANSAKSI PENJUALAN KREDIT
+
             // Logika peralatan dan perlengkapan
-            else if ($request->account_type === 'Peralatan' || $request->account_type === 'Perlengkapan') {
+            else if ($validated["account_type"] === 'Peralatan' || $validated["account_type"] === 'Perlengkapan') {
                 $nilaiBuku = $subLedgerPenjualan->nilai_buku ?? 0;
 
                 TransactionDetail::create([

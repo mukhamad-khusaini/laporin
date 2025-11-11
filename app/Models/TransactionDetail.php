@@ -36,7 +36,7 @@ class TransactionDetail extends Model
                 'id'=> $detail->transactionHeader->id,
                 'transaction_date' => $detail->transactionHeader->transaction_date->format('Y-m-d\TH:i'),
                 'sub_ledger' => $detail->subLedger->name ?? '-',
-                'total' => floatval($detail->debit)*$detail->quantity,
+                'total' => floatval($detail->debit),
                 'quantity' => $detail->quantity,
                 'vendor' => $vendorDetail?->subLedger?->name ?? '-',
                 'account_type' => $detail->account->name ?? '-',
@@ -69,6 +69,7 @@ class TransactionDetail extends Model
                 'transaction_date' => $detail->transactionHeader->transaction_date->format('Y-m-d\TH:i'),
                 'sub_ledger' => $detail->subLedger->name ?? '-',
                 'total' => floatval($detail->debit),
+                'quantity' => $detail->quantity,
                 'source' => $sourceDetail?->subLedger?->name ?? '-',
                 'account_type' => $detail->account->name ?? '-',
                 'description' => $detail->transactionHeader->description ?? "",
@@ -96,6 +97,7 @@ class TransactionDetail extends Model
                 'sub_ledger'       => $kredit?->subLedger->name ?? '-',
                 'description'      => $header->description ?? '-',
                 'amount'           => $kredit?->credit ?? 0,
+                'quantity'           => $kredit?->quantity ?? 0,
                 'receivable'          => $debit?->subLedger->name ?? '-',
             ];
         });

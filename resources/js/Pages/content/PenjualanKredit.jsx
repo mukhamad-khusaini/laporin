@@ -9,7 +9,8 @@ import PopupCore from "../utils/popup/PopupCore";
 import InputAkun from "../utils/popup/inputs/InputAkun";
 import { useForm } from "@inertiajs/react";
 import InputSubLedger from "../utils/popup/inputs/InputSubLedger";
-import InputJumlah from "../utils/popup/inputs/InputJumlah";
+import InputHarga from "../utils/popup/inputs/InputHarga";
+import InputQuantity from "../utils/popup/inputs/InputQuantity";
 import InputKeterangan from "../utils/popup/inputs/InputKeterangan";
 import InputTanggal from "../utils/popup/inputs/InputTanggal";
 import DeletePopup from "../utils/popup/DeletePopup";
@@ -66,6 +67,7 @@ export default function PenjualanKredit() {
         account_type: "",
         sub_ledger: "",
         amount: "",
+        quantity: "",
         receivable: "",
         transaction_date: new Date().toISOString().slice(0, 16),
         description: "",
@@ -90,6 +92,10 @@ export default function PenjualanKredit() {
 
     const hendleAddSetValue_amount = (e) => {
         setDataTambah("amount", e);
+    };
+
+    const hendleAddSetValue_quantity = (e) => {
+        setDataTambah("quantity", e);
     };
 
     const hendleAddSetValue_description = (e) => {
@@ -140,6 +146,7 @@ export default function PenjualanKredit() {
         account_type: "",
         sub_ledger: "",
         amount: "",
+        quantity: "",
         receivable: "",
         transaction_date: new Date().toISOString().slice(0, 16),
         description: "",
@@ -164,6 +171,10 @@ export default function PenjualanKredit() {
 
     const hendleEditSetValue_amount = (e) => {
         setDataEdit("amount", e);
+    };
+
+    const hendleEditSetValue_quantity = (e) => {
+        setDataEdit("quantity", e);
     };
 
     const hendleEditSetValue_description = (e) => {
@@ -238,6 +249,7 @@ export default function PenjualanKredit() {
         "Akun",
         "Barang",
         "Keterangan",
+        "Qty",
         "Total",
         "Piutang",
         "Aksi",
@@ -338,7 +350,12 @@ export default function PenjualanKredit() {
                         onAdd={hendleAddReceivableSubLedger}
                         name="Piutang"
                     />
-                    <InputJumlah
+                    <InputQuantity
+                        value={dataTambah.quantity}
+                        hendleSetValue={hendleAddSetValue_quantity}
+                        name="Penjualan"
+                    />
+                    <InputHarga
                         value={dataTambah.amount}
                         hendleSetValue={hendleAddSetValue_amount}
                         name="Penjualan"
@@ -381,7 +398,9 @@ export default function PenjualanKredit() {
                                         {item.description}
                                     </td>
                                     <td className="px-4 py-2">
-                                        {formatRupiah(item.amount)}
+                                        {formatRupiah(
+                                            item.amount * item.quantity
+                                        )}
                                     </td>
                                     <td className="px-4 py-2">
                                         {item.piutang}
@@ -442,7 +461,12 @@ export default function PenjualanKredit() {
                         onAdd={hendleAddReceivableSubLedger}
                         name="Piutang"
                     />
-                    <InputJumlah
+                    <InputQuantity
+                        value={dataEdit.quantity}
+                        hendleSetValue={hendleEditSetValue_quantity}
+                        name="Penjualan"
+                    />
+                    <InputHarga
                         value={dataEdit.amount}
                         hendleSetValue={hendleEditSetValue_amount}
                         name="Penjualan"

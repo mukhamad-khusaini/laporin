@@ -141,7 +141,7 @@ export default function TabelTransaksiPembelian({
                         {filteredData.length === 0 ? (
                             <tr>
                                 <td
-                                    colSpan={5}
+                                    colSpan={9}
                                     className="text-center py-6 text-gray-500"
                                 >
                                     <span className="italic">
@@ -177,7 +177,9 @@ export default function TabelTransaksiPembelian({
                                         {row.quantity}
                                     </td>
                                     <td className="px-4 py-2 text-right">
-                                        {row.total.toLocaleString()}
+                                        {(
+                                            row.total * row.quantity
+                                        ).toLocaleString()}
                                     </td>
                                     <td className="px-4 py-2">
                                         {transaction_type == "kredit"
