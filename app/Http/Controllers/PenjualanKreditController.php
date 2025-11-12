@@ -128,7 +128,9 @@ class PenjualanKreditController extends Controller
 
             // Logika peralatan dan perlengkapan
             else if ($validated["account_type"] === 'Peralatan' || $validated["account_type"] === 'Perlengkapan') {
-                $nilaiBuku = $subLedgerPenjualan->nilai_buku ?? 0;
+                $nilaiBuku = TransactionDetail::whereHas('subLedger', function ($q) {
+                    $q->where('name', $subLedgerPenjualan->name);
+                })->get(['quantity', 'debit', 'credit']);
 
                 TransactionDetail::create([
                     'transaction_header_id' => $header->id,
