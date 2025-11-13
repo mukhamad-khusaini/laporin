@@ -73,12 +73,10 @@ class PenjualanKreditController extends Controller
 
         DB::beginTransaction();
 
-        // KODE INI MASIH COPAS, PERLU ADA CHECK AND BALANCE
 
         try {
             $hargaJual = $validated["amount"];
             $akunPenjualan = Account::where('name', $validated["account_type"])->firstOrFail();
-            $subLedgerPenjualan = SubLedger::where('name', $validated["sub_ledger"])->where('account_id', $akunPenjualan->id)->first();
             $akunPiutang = Account::where('name', 'Piutang')->firstOrFail();
             $subLedgerPiutang = SubLedger::where('name', $validated["receivable"])->where('account_id', $akunPiutang->id)->first();
 
@@ -92,6 +90,7 @@ class PenjualanKreditController extends Controller
             // Logika pencatatan
             // Logika produk
             if ($validated["account_type"] === 'Produk') {
+                // $subLedgerPenjualan = SubLedger::where('name', $validated["sub_ledger"])->where('account_id', $akunPenjualan->id)->first();
                 // $hpp = $subLedgerPenjualan->nilai_buku ?? 0;
 
                 // TransactionDetail::create([
@@ -128,9 +127,12 @@ class PenjualanKreditController extends Controller
 
             // Logika peralatan dan perlengkapan
             else if ($validated["account_type"] === 'Peralatan' || $validated["account_type"] === 'Perlengkapan') {
+                $subLedgerPenjualan = SubLedger::where('name', $validated["sub_ledger"])->where('account_id', $akunPenjualan->id)->first();
                 $nilaiBuku = TransactionDetail::whereHas('subLedger', function ($q) {
                     $q->where('name', $subLedgerPenjualan->name);
                 })->get(['quantity', 'debit', 'credit']);
+
+                dd($nilaiBuku);
 
                 TransactionDetail::create([
                     'transaction_header_id' => $header->id,
