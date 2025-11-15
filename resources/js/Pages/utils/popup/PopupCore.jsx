@@ -37,7 +37,7 @@ const PopupCore = ({
                 className="bg-white p-6 rounded shadow-lg w-full max-w-xl space-y-4 relative"
             >
                 <h2 className="text-lg font-semibold">{status} Transaksi</h2>
-                {children}
+                <div className="max-h-[90vh] overflow-y-auto">{children}</div>
                 <div className="flex justify-end space-x-2">
                     <button
                         onClick={onClose}

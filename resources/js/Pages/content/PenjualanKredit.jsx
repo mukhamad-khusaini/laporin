@@ -14,6 +14,7 @@ import InputQuantity from "../utils/popup/inputs/InputQuantity";
 import InputKeterangan from "../utils/popup/inputs/InputKeterangan";
 import InputTanggal from "../utils/popup/inputs/InputTanggal";
 import DeletePopup from "../utils/popup/DeletePopup";
+import FlashMessage from "../utils/FlashMessage";
 
 export default function PenjualanKredit() {
     // Get page props
@@ -314,6 +315,7 @@ export default function PenjualanKredit() {
 
     return (
         <AuthenticatedLayout title="Penjualan Kredit">
+            <FlashMessage />
             <h2 className="text-2xl font-bold px-6 py-3 mb-4">
                 Penjualan Kredit
             </h2>

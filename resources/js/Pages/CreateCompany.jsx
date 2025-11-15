@@ -35,6 +35,11 @@ export default function CreateCompany() {
             code: 103,
             type_id: 1,
         },
+        {
+            name: "Piutang",
+            code: 106,
+            type_id: 1,
+        },
     ];
     const akunTambahan = {
         jasa: [

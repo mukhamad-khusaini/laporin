@@ -78,7 +78,9 @@ class PenjualanKreditController extends Controller
             $hargaJual = $validated["amount"];
             $akunPenjualan = Account::where('name', $validated["account_type"])->firstOrFail();
             $akunPiutang = Account::where('name', 'Piutang')->firstOrFail();
+            $subLedgerPenjualan = SubLedger::where('name', $validated["sub_ledger"])->where('account_id', $akunPenjualan->id)->first();
             $subLedgerPiutang = SubLedger::where('name', $validated["receivable"])->where('account_id', $akunPiutang->id)->first();
+
 
             // Buat header transaksi
             $header = TransactionHeader::create([
@@ -123,7 +125,7 @@ class PenjualanKreditController extends Controller
             }
             
 
-            // MULAI MEMBANGUN LOGIKA TAMBAH TRANSAKSI PENJUALAN KREDIT
+            // PERLU MENAMBAHKAN COMPANY ID PADA QUERY
 
             // Logika peralatan dan perlengkapan
             else if ($validated["account_type"] === 'Peralatan' || $validated["account_type"] === 'Perlengkapan') {
@@ -131,8 +133,6 @@ class PenjualanKreditController extends Controller
                 $nilaiBuku = TransactionDetail::whereHas('subLedger', function ($q) {
                     $q->where('name', $subLedgerPenjualan->name);
                 })->get(['quantity', 'debit', 'credit']);
-
-                dd($nilaiBuku);
 
                 TransactionDetail::create([
                     'transaction_header_id' => $header->id,
