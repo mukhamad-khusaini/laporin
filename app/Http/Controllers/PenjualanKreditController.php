@@ -7,6 +7,7 @@ use App\Models\SubLedger;
 use App\Models\TransactionDetail;
 use App\Models\TransactionHeader;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
@@ -84,6 +85,8 @@ class PenjualanKreditController extends Controller
 
             // Buat header transaksi
             $header = TransactionHeader::create([
+                'company_id'          => Auth::user()->company->id,
+                'user_id'             => Auth::user()->id,
                 'transaction_date'    => $validated["transaction_date"],
                 'transaction_category'=> 'penjualan.kredit',
                 'description'         => $validated["description"],
