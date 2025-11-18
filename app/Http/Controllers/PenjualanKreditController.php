@@ -137,6 +137,8 @@ class PenjualanKreditController extends Controller
                     $q->where('name', $subLedgerPenjualan->name);
                 })->get(['quantity', 'debit', 'credit']);
 
+                dd($nilaiBuku);
+
                 TransactionDetail::create([
                     'transaction_header_id' => $header->id,
                     'account_id'            => $akunPiutang->id,
