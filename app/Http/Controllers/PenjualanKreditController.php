@@ -95,36 +95,36 @@ class PenjualanKreditController extends Controller
             // Logika pencatatan
             // Logika produk
             if ($validated["account_type"] === 'Produk') {
-                // $subLedgerPenjualan = SubLedger::where('name', $validated["sub_ledger"])->where('account_id', $akunPenjualan->id)->first();
-                // $hpp = $subLedgerPenjualan->nilai_buku ?? 0;
+                $subLedgerPenjualan = SubLedger::where('name', $validated["sub_ledger"])->where('account_id', $akunPenjualan->id)->first();
+                $hpp = $subLedgerPenjualan->nilai_buku ?? 0;
 
-                // TransactionDetail::create([
-                //     'transaction_header_id' => $header->id,
-                //     'account_id'            => $akunPiutang->id,
-                //     'sub_ledger_id'         => $subLedgerPiutang->id,
-                //     'debit'                 => $hargaJual,
-                // ]);
+                TransactionDetail::create([
+                    'transaction_header_id' => $header->id,
+                    'account_id'            => $akunPiutang->id,
+                    'sub_ledger_id'         => $subLedgerPiutang->id,
+                    'debit'                 => $hargaJual,
+                ]);
 
-                // TransactionDetail::create([
-                //     'transaction_header_id' => $header->id,
-                //     'account_id'            => $akunPenjualan->id,
-                //     'sub_ledger_id'         => $subLedgerPenjualan->id,
-                //     'credit'                => $hargaJual,
-                // ]);
+                TransactionDetail::create([
+                    'transaction_header_id' => $header->id,
+                    'account_id'            => $akunPenjualan->id,
+                    'sub_ledger_id'         => $subLedgerPenjualan->id,
+                    'credit'                => $hargaJual,
+                ]);
 
-                // $akunHPP = Account::where('name', 'HPP')->firstOrFail();
-                // TransactionDetail::create([
-                //     'transaction_header_id' => $header->id,
-                //     'account_id'            => $akunHPP->id,
-                //     'debit'                 => $hpp,
-                // ]);
+                $akunHPP = Account::where('name', 'HPP')->firstOrFail();
+                TransactionDetail::create([
+                    'transaction_header_id' => $header->id,
+                    'account_id'            => $akunHPP->id,
+                    'debit'                 => $hpp,
+                ]);
 
-                // TransactionDetail::create([
-                //     'transaction_header_id' => $header->id,
-                //     'account_id'            => $akunPenjualan->id,
-                //     'sub_ledger_id'         => $subLedgerPenjualan->id,
-                //     'credit'                => $hpp,
-                // ]);
+                TransactionDetail::create([
+                    'transaction_header_id' => $header->id,
+                    'account_id'            => $akunPenjualan->id,
+                    'sub_ledger_id'         => $subLedgerPenjualan->id,
+                    'credit'                => $hpp,
+                ]);
             }
             
 
