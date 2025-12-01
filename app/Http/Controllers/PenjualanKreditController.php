@@ -148,6 +148,7 @@ class PenjualanKreditController extends Controller
                 // 
                 $allQuantity=array_sum(array_map(function ($i) {return intval($i['quantity']);}, $allRelevantTransaction->toArray()));
                 $allAmount=array_sum(array_map(function ($i) {return intval($i['quantity'])*intval($i['debit']);},$allRelevantTransaction->toArray()));
+                $averageItemValue=$allAmount/$allQuantity;
 
                 // Masukan transaksi piutang ke debit
                 // 
@@ -160,9 +161,16 @@ class PenjualanKreditController extends Controller
 
     
                 // BUAT LOGIKA UNTUK MENENTUKAN APAKAH HARGA JUAL LEBIH RENDAH ATAU TINGGI DARI NILAI BUKU
-
-                if ($hargaJual < $allRelevantTransaction) {
-                    $akunBeban = Account::where('name', 'Beban Penjualan')->firstOrFail();
+                // 
+                // CARI CARA AGAR ACCOUNT TYPE ADA MODELNYA 
+                if ($hargaJual < $averageItemValue*$validated['quantity']) {
+                    $akunBeban = Account::firstOrCreate(['name' => 'Beban Penyusutan'],[
+                        "company_id"=>Auth::user()->company->id,
+                        "account_type_id"=>'',
+                        "name"=>'',
+                        "account_code"=>'',
+                        "is_active"=>True,
+                    ]);
                     TransactionDetail::create([
                         'transaction_header_id' => $header->id,
                         'account_id'            => $akunBeban->id,
